@@ -1,0 +1,9 @@
+[package]
+name = "testing"
+version = "0.1.0"
+authors = ["David McNeil <demcnei@n-ask.com>"]
+
+[dependencies]
+itertools = "0.5.9"
+libc = "0.2.20"
+rand = "0.3.15"
