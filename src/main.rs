@@ -33,7 +33,7 @@ pub extern "C" fn kmeans_painter_step(kmeans_painter: *mut KmeansPainter, steps:
 
 #[no_mangle]
 pub extern "C" fn kmeans_painter_free(kmeans_painter: *mut KmeansPainter) {
-    let kmeans_painter: Box<KmeansPainter> = unsafe { mem::transmute(kmeans_painter) };
+    let _: Box<KmeansPainter> = unsafe { mem::transmute(kmeans_painter) };
 }
 
 fn main() {}
