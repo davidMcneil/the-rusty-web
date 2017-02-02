@@ -26,14 +26,15 @@ function draw(img) {
         img_array[i] = image_data.data[i];
     }
     image_data = new ImageData(img_array, width, height);
-    let kmeans_painter_ptr = kmeans_painter_new(3, img_ptr, byte_count);
+    let kmeans_painter_ptr = kmeans_painter_new(20, img_ptr, byte_count);
 
     let kmeans_callback = function () {
-        kmeans_painter_step(kmeans_painter_ptr, 10);
+        kmeans_painter_step(kmeans_painter_ptr, 20);
         /* We now have a new heap. !!!! */
         img_array = new Uint8ClampedArray(Module.HEAPU8.buffer, img_ptr, byte_count);
         image_data = new ImageData(img_array, width, height);
         ctx.putImageData(image_data, 0, 0);
+        console.log("rendered");
     };
 
     let kmeans_button = document.getElementById('kmeans_button');

@@ -1,65 +1,14 @@
 use rand;
 use rand::Rng;
 use std::cmp::Ordering;
-use std::fmt::Debug;
-use std::time::Instant;
-use std::u64;
 
 pub type Features = Vec<f64>;
 
-pub trait Observation: Debug + Clone {
-    fn features(&self) -> Features;
-}
-
-#[derive(Debug)]
-pub struct Cluster<T: Observation> {
-    centroid: Features,
-    observations: Vec<T>,
-}
-
-impl<T: Observation> Cluster<T> {
-    fn new(observation: &T) -> Cluster<T> {
-        Cluster {
-            centroid: observation.features(),
-            observations: Vec::new(),
-        }
-    }
-
-    fn add_observation(&mut self, observation: T) {
-        self.observations.push(observation);
-    }
-
-    fn clear_observations(&mut self) {
-        self.observations.clear();
-    }
-
-    pub fn centroid(&self) -> &Features {
-        &self.centroid
-    }
-
-    pub fn observations(&self) -> &Vec<T> {
-        &self.observations
-    }
-
-    fn distance(&self, observation: &T) -> f64 {
-        self.centroid
-            .iter()
-            .zip(observation.features())
-            .fold(0.0, |acc, (f1, f2)| acc + (f1 - f2).powi(2))
-            .sqrt()
-    }
-
-    fn set_centroid(&mut self) -> bool {
-        let orginal_centroid = self.centroid.clone();
-        self.centroid = self.observations
-            .iter()
-            .fold(vec![0.0; self.centroid.len()],
-                  |acc, o| o.features().iter().zip(acc).map(|(f1, f2)| f1 + f2).collect())
-            .iter()
-            .map(|f| f / (self.observations.len() as f64))
-            .collect();
-        self.centroid != orginal_centroid
-    }
+fn distance(observation_1: &Features, observation_2: &Features) -> f64 {
+    observation_1.iter()
+        .zip(observation_2)
+        .fold(0.0, |acc, (f1, f2)| acc + (f1 - f2).powi(2))
+        .sqrt()
 }
 
 #[derive(PartialEq, PartialOrd)]
@@ -73,108 +22,176 @@ impl Ord for NonNan {
     }
 }
 
-#[allow(dead_code)]
-pub fn kmeans<T: Observation>(observations: &[T],
-                              k: u16,
-                              max_iterations: Option<u64>)
-                              -> Result<Vec<Cluster<T>>, String> {
-    let num_observations = observations.len();
-    let k = k as usize;
-    if num_observations < k {
-        return Err(format!("Number of observations ({}) less than number of clusters ({}).",
-                           num_observations,
-                           k));
-    }
-    // Initialize the centroids of the clusters to random observation features.
-    let mut random_indexes: Vec<_> = (0..num_observations).collect();
-    rand::thread_rng().shuffle(&mut random_indexes);
-    let mut clusters: Vec<_> = random_indexes.iter()
-        .take(k)
-        .map(|i| Cluster::new(&observations[*i]))
-        .collect();
-    let mut iterations = 0;
-    let max_iterations = max_iterations.unwrap_or(u64::max_value());
-    let mut changed = true;
-    while changed && iterations < max_iterations {
-        let start_time = Instant::now();
-        // Clear all observations in clusters.
-        for c in clusters.iter_mut() {
-            c.clear_observations();
+#[derive(Debug)]
+pub struct Cluster<'a> {
+    centroid: Features,
+    observations: Vec<&'a Features>,
+}
+
+impl<'a> Cluster<'a> {
+    fn new(centroid: Features) -> Cluster<'a> {
+        Cluster {
+            centroid: centroid,
+            observations: Vec::new(),
         }
-        // Place each observation in the cluster with the closest centroid.
-        for o in observations.iter().cloned() {
-            clusters.iter_mut()
-                .min_by_key(|c| NonNan(c.distance(&o)))
-                .unwrap()
-                .add_observation(o);
-        }
-        // Recalculate the centroid for each cluster and check for the break condition.
-        let changes: Vec<_> = clusters.iter_mut().map(|c| c.set_centroid()).collect();
-        changed = changes.iter().any(|change| *change);
-        iterations += 1;
-        let duration = start_time.elapsed();
-        println!("Iteration {:?} took {:.3}ms",
-                 iterations,
-                 (duration.as_secs() as f64) * 1000f64 +
-                 (duration.subsec_nanos() as f64) / 1_000_000f64);
     }
-    Ok(clusters)
+
+    fn add_observation(&mut self, observation: &'a Features) {
+        self.observations.push(observation);
+    }
+
+    fn clear_observations(&mut self) {
+        self.observations.clear();
+    }
+
+    fn distance(&self, observation: &Features) -> f64 {
+        distance(&self.centroid, observation)
+    }
+
+    fn set_centroid(&mut self) {
+        self.centroid = self.observations
+            .iter()
+            .fold(vec![0.0; self.centroid.len()],
+                  |acc, obs| obs.iter().zip(acc).map(|(o, a)| o + a).collect())
+            .iter()
+            .map(|f| f / (self.observations.len() as f64))
+            .collect();
+    }
+}
+
+#[derive(Debug)]
+pub struct Kmeans {
+    k: u16,
+    centroids: Vec<Features>,
+}
+
+impl Kmeans {
+    pub fn new(k: u16) -> Kmeans {
+        Kmeans {
+            k: k,
+            centroids: Vec::new(),
+        }
+    }
+
+    pub fn train(self: &mut Kmeans, observations: &[Features], steps: u16) {
+        // Add random centroids if needed.
+        while self.centroids.len() < self.k as usize {
+            let random_observation = rand::thread_rng().choose(observations).unwrap();
+            self.centroids.push(random_observation.clone());
+        }
+        // Create clusters.
+        let mut clusters: Vec<_> = self.centroids
+            .iter()
+            .map(|c| Cluster::new(c.clone()))
+            .collect();
+        let mut step = 0;
+        while step < steps {
+            // Clear all observations in clusters.
+            for c in clusters.iter_mut() {
+                c.clear_observations();
+            }
+            // Place each observation in the cluster with the closest centroid.
+            for o in observations.iter() {
+                clusters.iter_mut()
+                    .min_by_key(|c| NonNan(c.distance(&o)))
+                    .unwrap()
+                    .add_observation(&o);
+            }
+            // Recalculate the centroid for each cluster.
+            for cluster in clusters.iter_mut() {
+                cluster.set_centroid();
+            }
+            step += 1;
+        }
+        // Make each cluster centroid a kmeans centroid.
+        self.centroids.clear();
+        for Cluster { centroid, .. } in clusters {
+            self.centroids.push(centroid.clone());
+        }
+    }
+
+    pub fn predict(self: &Kmeans, observation: &Features) -> Features {
+        self.centroids
+            .iter()
+            .min_by_key(|c| NonNan(distance(c, observation)))
+            .unwrap()
+            .clone()
+    }
+
+    pub fn centroids(self: &Kmeans) -> &Vec<Features> {
+        &self.centroids
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    extern crate image;
     use kmeans::*;
-
-    impl Observation for (f64, f64) {
-        fn features(&self) -> Features {
-            vec![self.0, self.1]
-        }
-    }
-
-    impl Observation for (u8, u8, u8) {
-        fn features(&self) -> Features {
-            vec![self.0 as f64, self.1 as f64, self.2 as f64]
-        }
-    }
-
-    impl Observation for (u8, u8, u8, u8) {
-        fn features(&self) -> Features {
-            vec![self.0 as f64, self.1 as f64, self.2 as f64, self.3 as f64]
-        }
-    }
-
-    impl Observation for Vec<f64> {
-        fn features(&self) -> Features {
-            self.clone()
-        }
-    }
+    use self::image::{RgbImage, Pixel, Rgb};
+    use std::path::Path;
 
     #[test]
     fn distance_test() {
-        let f1 = (14, 5, 6);
-        let f2 = (14, 5, 7);
-        assert_eq!(Cluster::new(&f1).distance(&f1), 0.0);
-        assert_eq!(Cluster::new(&f1).distance(&f2), 1.0);
-        let f1 = (100.0, -17.12);
-        let f2 = (600.45, 37.0);
-        assert_eq!(Cluster::new(&f1).distance(&f2), 503.3678345901733);
-        let f1 = (1, 2, 3, 4);
-        let f2 = (5, 6, 7, 8);
-        assert_eq!(Cluster::new(&f1).distance(&f2), 8.0);
+        let f1 = vec![14.0, 5.0, 6.0];
+        let f2 = vec![14.0, 5.0, 7.0];
+        assert_eq!(Cluster::new(f1.clone()).distance(&f1), 0.0);
+        assert_eq!(Cluster::new(f1.clone()).distance(&f2), 1.0);
+        let f1 = vec![100.0, -17.12];
+        let f2 = vec![600.45, 37.0];
+        assert_eq!(Cluster::new(f1.clone()).distance(&f2), 503.3678345901733);
+        let f1 = vec![1.0, 2.0, 3.0, 4.0];
+        let f2 = vec![5.0, 6.0, 7.0, 8.0];
+        assert_eq!(Cluster::new(f1.clone()).distance(&f2), 8.0);
     }
 
     #[test]
-    fn kmeans_test() {
-        let v = vec![(1, 2, 3),
-                     (3, 2, 1),
-                     (4, 5, 6),
-                     (10, 11, 12),
-                     (11, 11, 11),
-                     (15, 13, 12),
-                     (19, 10, 11)];
-        let clusters = kmeans(&v, 2, None).unwrap();
-        assert!(clusters.iter()
-            .any(|c| c.centroid == vec![2.6666666666666665, 3.0, 3.3333333333333335]));
-        assert!(clusters.iter().any(|c| c.centroid == vec![13.75, 11.25, 11.5]));
+    fn kmeans_test_1() {
+        let observations = vec![vec![1.0, 2.0, 3.0],
+                                vec![3.0, 2.0, 1.0],
+                                vec![4.0, 5.0, 6.0],
+                                vec![10.0, 11.0, 12.0],
+                                vec![11.0, 11.0, 11.0],
+                                vec![15.0, 13.0, 12.0],
+                                vec![19.0, 10.0, 11.0]];
+        let mut kmeans = Kmeans::new(2);
+        kmeans.train(&observations, 20);
+        let centroids = kmeans.centroids();
+        assert!(centroids.iter()
+            .any(|c| *c == vec![2.6666666666666665, 3.0, 3.3333333333333335]));
+        assert!(centroids.iter().any(|c| *c == vec![13.75, 11.25, 11.5]));
+    }
+
+    pub fn picture2observations(image: &RgbImage) -> Vec<Features> {
+        let mut observations = Vec::new();
+        for color in image.pixels() {
+            let (r, g, b, _) = color.channels4();
+            let (r, g, b) = (r as f64 / 255.0, g as f64 / 255.0, b as f64 / 255.0);
+            observations.push(vec![r, g, b])
+        }
+        observations
+    }
+
+    fn features2rgb(features: &Features) -> Rgb<u8> {
+        Rgb::from_channels((features[0] * 255.0) as u8,
+                           (features[1] * 255.0) as u8,
+                           (features[2] * 255.0) as u8,
+                           255)
+    }
+
+    #[test]
+    fn kmeans_test_2() {
+        let mut dynamic_image = image::open(&Path::new("tiger.jpg")).unwrap();
+        let img = dynamic_image.as_mut_rgb8().unwrap();
+        let observations = picture2observations(img);
+        let mut kmeans = Kmeans::new(15);
+        kmeans.train(&observations, 40);
+        let width = img.width() as u32;
+        for (i, observation) in observations.iter().enumerate() {
+            let color = kmeans.predict(observation);
+            img.put_pixel((i as u32 % width), (i as u32 / width), features2rgb(&color));
+        }
+        // color(&clusters, img);
+        let fout = Path::new("out.png");
+        let _ = img.save(&fout).unwrap();
     }
 }
