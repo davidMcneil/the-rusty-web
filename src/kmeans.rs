@@ -74,7 +74,7 @@ impl Kmeans {
     }
 
     pub fn train(self: &mut Kmeans, observations: &[Features], steps: u16) {
-        // Add random centroids if needed.
+        // Add randomly initialized centroids if needed.
         while self.centroids.len() < self.k as usize {
             let random_observation = rand::thread_rng().choose(observations).unwrap();
             self.centroids.push(random_observation.clone());
