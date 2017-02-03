@@ -1,10 +1,10 @@
 const K = 3;
 const STEPS = 5;
 let js_img = new Image();
-js_img.src = 'http://localhost:8000/tiger.jpg';
+js_img.src = 'http://localhost:8000/test.png';
 js_img.onload = function () { setup_painter(this, "js", "js_canvas", "js_button", JsKmeansPainter); };
 let rs_img = new Image();
-rs_img.src = 'http://localhost:8000/tiger.jpg';
+rs_img.src = 'http://localhost:8000/test.png';
 rs_img.onload = function () { setup_painter(this, "rs", "rs_canvas", "rs_button", RsKmeansPainter); };
 
 const setup_painter = (img, msg, canvas_id, button_id, painter_class) => {

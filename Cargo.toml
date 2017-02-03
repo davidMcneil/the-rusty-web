@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["David McNeil <demcnei@n-ask.com>"]
 
 [dependencies]
+image = "0.11.0"
 itertools = "0.5.9"
 libc = "0.2.20"
 rand = "0.3.15"
