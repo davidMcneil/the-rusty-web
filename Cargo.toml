@@ -1,7 +1,7 @@
 [package]
-name = "testing"
+name = "the_rusty_web"
 version = "0.1.0"
-authors = ["David McNeil <demcnei@n-ask.com>"]
+authors = ["David McNeil <mcneil.david2@gmail.com>"]
 
 [dependencies]
 image = "0.11.0"

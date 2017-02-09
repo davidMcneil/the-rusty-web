@@ -2,41 +2,42 @@ use rand;
 use rand::Rng;
 use std::cmp::Ordering;
 
-pub type Features = Vec<f64>;
+pub type Feature = f64;
 
-fn distance(observation_1: &Features, observation_2: &Features) -> f64 {
-    observation_1.iter()
-        .zip(observation_2)
-        .fold(0.0, |acc, (o1, o2)| acc + (o1 - o2).powi(2))
-        .sqrt()
+fn distance(observation_1: &[Feature], observation_2: &[Feature]) -> f64 {
+    let mut sum_sqrs = 0.0;
+    for i in 0..observation_1.len() {
+        sum_sqrs += (observation_1[i] - observation_2[i]).powi(2);
+    }
+    sum_sqrs.sqrt()
 }
 
 #[derive(PartialEq, PartialOrd)]
-struct NonNan(f64);
+struct TotalOrderedF64(f64);
 
-impl Eq for NonNan {}
+impl Eq for TotalOrderedF64 {}
 
-impl Ord for NonNan {
-    fn cmp(&self, other: &NonNan) -> Ordering {
-        self.partial_cmp(other).unwrap()
+impl Ord for TotalOrderedF64 {
+    fn cmp(&self, other: &TotalOrderedF64) -> Ordering {
+        self.partial_cmp(other).expect("Unable to compare TotalOrderedF64s.")
     }
 }
 
 #[derive(Debug)]
-pub struct Cluster<'a> {
-    centroid: Features,
-    observations: Vec<&'a Features>,
+struct Cluster<'a> {
+    centroid: Vec<Feature>,
+    observations: Vec<&'a [Feature]>,
 }
 
 impl<'a> Cluster<'a> {
-    fn new(centroid: Features) -> Cluster<'a> {
+    fn new(centroid: Vec<Feature>) -> Cluster<'a> {
         Cluster {
             centroid: centroid,
             observations: Vec::new(),
         }
     }
 
-    fn add_observation(&mut self, observation: &'a Features) {
+    fn add_observation(&mut self, observation: &'a [Feature]) {
         self.observations.push(observation);
     }
 
@@ -44,7 +45,7 @@ impl<'a> Cluster<'a> {
         self.observations.clear();
     }
 
-    fn distance(&self, observation: &Features) -> f64 {
+    fn distance(&self, observation: &[Feature]) -> f64 {
         distance(&self.centroid, observation)
     }
 
@@ -62,7 +63,7 @@ impl<'a> Cluster<'a> {
 #[derive(Debug)]
 pub struct Kmeans {
     k: u16,
-    centroids: Vec<Features>,
+    centroids: Vec<Vec<Feature>>,
 }
 
 impl Kmeans {
@@ -73,32 +74,34 @@ impl Kmeans {
         }
     }
 
-    pub fn train(self: &mut Kmeans, observations: &[Features], steps: u16) {
+    pub fn train(self: &mut Kmeans, observations: &[Vec<Feature>], steps: u16) {
         // Add randomly initialized centroids if needed.
         while self.centroids.len() < self.k as usize {
-            let random_observation = rand::thread_rng().choose(observations).unwrap();
+            let random_observation = rand::thread_rng()
+                .choose(observations)
+                .expect("Unable to select random observation.");
             self.centroids.push(random_observation.clone());
         }
-        // Create clusters.
+        // Create clusters from the centroids.
         let mut clusters: Vec<_> = self.centroids
             .iter()
             .map(|c| Cluster::new(c.clone()))
             .collect();
         let mut step = 0;
         while step < steps {
-            // Clear all observations in clusters.
-            for c in clusters.iter_mut() {
+            // Clear all the observations from the clusters.
+            for c in &mut clusters {
                 c.clear_observations();
             }
             // Place each observation in the cluster with the closest centroid.
-            for o in observations.iter() {
+            for o in observations {
                 clusters.iter_mut()
-                    .min_by_key(|c| NonNan(c.distance(&o)))
-                    .unwrap()
-                    .add_observation(&o);
+                    .min_by_key(|c| TotalOrderedF64(c.distance(o)))
+                    .expect("Unable to determine closest cluster.")
+                    .add_observation(o);
             }
             // Recalculate the centroid for each cluster.
-            for cluster in clusters.iter_mut() {
+            for cluster in &mut clusters {
                 cluster.set_centroid();
             }
             step += 1;
@@ -110,11 +113,12 @@ impl Kmeans {
         }
     }
 
-    pub fn predict(self: &Kmeans, observation: &Features) -> Features {
+
+    pub fn predict(self: &Kmeans, observation: &[Feature]) -> Vec<Feature> {
         self.centroids
             .iter()
-            .min_by_key(|c| NonNan(distance(c, observation)))
-            .unwrap()
+            .min_by_key(|c| TotalOrderedF64(distance(c, observation)))
+            .expect("Unable to determine closest centroid.")
             .clone()
     }
 }

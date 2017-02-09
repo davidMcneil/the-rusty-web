@@ -1,0 +1,4 @@
+[target.asmjs-unknown-emscripten]
+rustflags = [
+    "-Clink-args=-O3 --memory-init-file 0 -s EXPORTED_FUNCTIONS=['_kmeans_painter_create','_kmeans_painter_step','_kmeans_painter_destroy'] -s ALLOW_MEMORY_GROWTH=1",
+]
