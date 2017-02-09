@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>The Rusty Web</title>
+
+    <script src="testing.js"></script>
+    <script src="index.bundle.js"></script>
+</head>
+
+<body>
+    <h1>The Rusty Web</h1>
+    <a href="">About</a>
+    <a href="">Demo</a>
+    <a href="">Results</a>
+    <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">Guide</a>
+    <a href="">Source Code</a>
+    <p>
+        This website demonstrates how to target the web using
+        <a href="https://www.rust-lang.org">Rust</a>. Specifically, how to compile Rust to asm.js or WebAssembly.
+    </p>
+    <p>
+        About
+    </p>
+    <input id="kRange" type="range" min="1" max="20" value="5" />
+    <input id="stepsRange" type="range" min="0" max="40" value="10" />
+    <input id="race_button" value="race" type="button" />
+    <h3>JsKmeansPainter</h3>
+    <input id="js_button" type="button" value="js" />
+    <canvas id="js_canvas" width="600" height="375"></canvas>
+    <h3>RsKmeansPainter</h3>
+    <input id="rs_button" type="button" value="rs" />
+    <canvas id="rs_canvas" width="600" height="375"></canvas>
+</body>
+
+</html>
