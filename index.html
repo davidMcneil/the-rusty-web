@@ -3,6 +3,9 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>The Rusty Web</title>
 
@@ -11,28 +14,141 @@
 </head>
 
 <body>
-    <h1>The Rusty Web</h1>
-    <a href="">About</a>
-    <a href="">Demo</a>
-    <a href="">Results</a>
-    <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">Guide</a>
-    <a href="">Source Code</a>
-    <p>
-        This website demonstrates how to target the web using
-        <a href="https://www.rust-lang.org">Rust</a>. Specifically, how to compile Rust to asm.js or WebAssembly.
-    </p>
-    <p>
-        About
-    </p>
-    <input id="kRange" type="range" min="1" max="20" value="5" />
-    <input id="stepsRange" type="range" min="0" max="40" value="10" />
-    <input id="race_button" value="race" type="button" />
-    <h3>JsKmeansPainter</h3>
-    <input id="js_button" type="button" value="js" />
-    <canvas id="js_canvas" width="600" height="375"></canvas>
-    <h3>RsKmeansPainter</h3>
-    <input id="rs_button" type="button" value="rs" />
-    <canvas id="rs_canvas" width="600" height="375"></canvas>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand topnav" href="#">The Rusty Web</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="#results">Results</a></li>
+                    <li><a href="#benchmarks">Benchmarks</a></li>
+                    <li><a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">Guide</a></li>
+                    <li><a href="https://github.com/davidMcneil/the-rusty-web">Source Code</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="intro-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>The Rusty Web</h1>
+                        <h3>Targeting the web with Rust.</h3>
+                        <hr class="intro-divider">
+                        <p class="lead">
+                            This website demonstrates how to target the web using
+                            <a href="https://www.rust-lang.org">Rust</a>. Specifically, how to compile Rust to asm.js or
+                            WebAssembly.
+                        </p>
+                        <ul class="list-inline intro-social-buttons">
+                            <li>
+                                <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/" class="btn btn-default btn-lg fixed-width-lg-btn">
+                                    <i class="fa fa-book fa-fw"></i>
+                                    <span class="network-name">Guide</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/davidMcneil/the-rusty-web" class="btn btn-default btn-lg fixed-width-lg-btn">
+                                    <i class="fa fa-github fa-fw"></i>
+                                    <span class="network-name">Github</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- About -->
+    <a name="about"></a>
+    <div class="content-section-a">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">About</h2>
+                    <p class="lead">
+                        about
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo -->
+    <a name="demo"></a>
+    <div class="content-section-b">
+        <div class="container">
+            <br/>
+            <div class="row">
+                <div class="col-md-6 text-xs-center text-sm-center text-left">
+                    <label>
+                        K (number of colors):<br/>
+                        <input id="k_range" type="text" data-slider-min="1" data-slider-max="100" data-slider-value="5" />
+                    </label>
+                    <label>
+                        Steps:<br/>
+                        <input id="steps_range" type="text" data-slider-min="0" data-slider-max="100" data-slider-value="10" />
+                    </label>
+                </div>
+                <input id="file_upload" class="file-input-hidden" type="file" accept="image/*" />
+                <div class="col-md-6 text-xs-center text-sm-center text-right">
+                    <div class="btn-group">
+                        <input class="btn btn-default btn-sm fixed-width-btn" type="button" value="Choose File" />
+                        <input id="reset_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Reset" />
+                        <input id="javascript_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="JavaScript" />
+                        <input id="asmjs_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (asm.js)" />
+                        <input id="wasm_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (wasm)" />
+                    </div>
+                </div>
+            </div>
+            <canvas id="image_canvas" style="width:100%"></canvas>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="content-section-a">
+        <div class="container">
+            <div class="row">
+                <a name="results"></a>
+                <p>
+                    Results
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benchmarks -->
+    <div class="content-section-b">
+        <div class="container">
+            <div class="row">
+                <a name="benchmarks"></a>
+                <p>
+                    Benchmarks
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
