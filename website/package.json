@@ -7,7 +7,7 @@
     "include-rust-lib": "cp ../target/asmjs-unknown-emscripten/release/the_rusty_web.js dist/",
     "build": "npm run include-rust-lib && webpack",
     "build-release": "npm run include-rust-lib && NODE_ENV=production webpack -p",
-    "start": "npm run include-rust-lib && webpack-dev-server",
+    "start": "npm run include-rust-lib && webpack-dev-server --hot",
     "loc": "sloc src/",
     "web": "webpack -v"
   },

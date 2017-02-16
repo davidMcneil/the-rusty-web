@@ -1,6 +1,7 @@
 /* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
+const webpack_dev_server = require("webpack-dev-server");
 
 module.exports = {
     entry: {
@@ -11,7 +12,7 @@ module.exports = {
         filename: "[name].bundle.js",
     },
     devServer: {
-        contentBase: path.join(__dirname, "dist"),
+        contentBase: path.join(__dirname, "./dist"),
         port: 9000,
         host: "localhost",
         compress: true,
