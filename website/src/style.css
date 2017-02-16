@@ -3,6 +3,12 @@ td {
     text-align: right;
 }
 
+.table-container {
+    display: block;
+    overflow: auto;
+    max-height: 400px;
+}
+
 .text-justify {
     text-align: justify;
 }
