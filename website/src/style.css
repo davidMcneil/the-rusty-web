@@ -1,13 +1,18 @@
-.slider {
-	margin-right: 25px;
+td {
+    font-weight: normal;
+    text-align: right;
 }
 
-.slider-selection {
-	background: #BABABA;
+.text-justify {
+    text-align: justify;
 }
 
-.slider-handle {
-	background: #858585;
+.no-results-row td {
+    text-align: center;
+}
+
+.small-margin {
+    margin-bottom: 5px;
 }
 
 .file-input-hidden {

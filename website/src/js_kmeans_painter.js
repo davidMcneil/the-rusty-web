@@ -2,6 +2,7 @@ import { Kmeans } from "./kmeans";
 
 export class JsKmeansPainter {
     constructor(k, image_memory) {
+        this.k = k;
         this.image_array = image_memory.get_image_array();
         this.observations = [];
         // Convert each pixel into an observation consisting of a red, blue, and green component.
@@ -10,8 +11,12 @@ export class JsKmeansPainter {
                 [this.image_array[i], this.image_array[i + 1], this.image_array[i + 2]]
             );
         }
-        this.kmeans = new Kmeans(k);
+        this.kmeans = new Kmeans(this.k);
     }
+
+    get_identifier() { return "JavaScript"; }
+
+    get_k() { return this.k; }
 
     step(steps) {
         this.kmeans.train(this.observations, steps);
@@ -23,4 +28,6 @@ export class JsKmeansPainter {
             this.image_array[(i * 4) + 2] = color[2];
         });
     }
+
+    free() { }
 }

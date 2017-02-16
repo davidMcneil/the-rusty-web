@@ -5,8 +5,13 @@ const destroy = Module.cwrap("kmeans_painter_destroy", null, ["number"]);
 
 export class RsKmeansPainter {
     constructor(k, image_memory) {
-        this.ptr = create(k, image_memory.get_ptr(), image_memory.get_byte_count());
+        this.k = k;
+        this.ptr = create(this.k, image_memory.get_ptr(), image_memory.get_byte_count());
     }
+
+    get_identifier() { return "Rust (asmjs)"; }
+
+    get_k() { return this.k; }
 
     step(steps) {
         step(this.ptr, steps);

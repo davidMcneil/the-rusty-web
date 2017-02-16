@@ -1,19 +1,19 @@
 /* External JavaScript Imports */
-import "jquery";
-import "bootstrap-slider";
-import "../template/js/bootstrap.min.js";
+import $ from "jquery";
 /* JavaScript Imports */
+import "./template/bootstrap.min.js";
 import { ImageMemory } from "./image_memory";
 import { JsKmeansPainter } from "./js_kmeans_painter";
 import { RsKmeansPainter } from "./rs_kmeans_painter";
 /* CSS Imports */
-import "../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css";
-import "../template/css/bootstrap.css";
-import "../template/css/landing-page.css";
-import "../template/font-awesome/css/font-awesome.css";
+import "./template/bootstrap.css";
+import "./template/landing-page.css";
+import "./template/font-awesome/css/font-awesome.min.css";
 import "./style.css";
 /* Image Imports */
-import default_image_filepath from "../../test.png";
+import default_image_filepath from "../../img/default.jpg";
+
+let STOP = false;
 
 const image2image_data = (image) => {
     const temp_canvas = document.createElement("canvas");
@@ -63,64 +63,138 @@ const draw_image_data = (image_data, canvas) => {
         0, 0, canvas.width, canvas.height);
 };
 
-const paint_canvas = (painter, steps, image_memory, canvas, msg) => {
-    const start = performance.now();
-    console.log(`Start: ${msg}.`);
-    painter.step(steps);
-    const end = performance.now();
-    draw_image_data(image_memory.get_image_data(), canvas);
-    console.log(`${msg}: ${Math.round(end - start)}ms`);
+const add_stats = (painter, image_data, times) => {
+    times.sort();
+    const length = times.length;
+    let total = 0;
+    const min = times[0];
+    const max = times[length - 1];
+    for (let time of times) {
+        total += time;
+    }
+    const half = Math.floor(length / 2);
+    let median;
+    if (length % 2) { median = times[half]; }
+    else { median = (times[half - 1] + times[half]) / 2.0; }
+    const average = total / length;
+    if ($("#results_table tbody tr").first().hasClass("no-results-row")) {
+        $("#results_table tr:last").remove();
+    }
+    $("#results_table").prepend(
+        "<tr>" +
+        `  <td>${painter.get_identifier()}</td>` +
+        `  <td>${painter.get_k()}</td>` +
+        `  <td>${length}</td>` +
+        `  <td>${image_data.width}x${image_data.height}</td>` +
+        `  <td> ${Math.round(total)}</td>` +
+        `  <td> ${Math.round(average)}</td>` +
+        `  <td> ${Math.round(median)}</td>` +
+        `  <td> ${Math.round(min)}</td>` +
+        `  <td> ${Math.round(max)}</td>` +
+        "</tr>"
+    );
 };
 
-window.onload = () => {
-    const file_upload = document.getElementById("file_upload");
-    const reset_button = document.getElementById("reset_button");
-    const k_range = document.getElementById("k_range");
-    const steps_range = document.getElementById("steps_range");
-    const javascript_button = document.getElementById("javascript_button");
-    const asmjs_button = document.getElementById("asmjs_button");
-    // const wasm_button = document.getElementById("wasm_button");
+const paint_canvas = (painter, steps, image_memory, canvas, times = []) => {
+    if (steps > 0 && !STOP) {
+        const start = performance.now();
+        painter.step(1);
+        const end = performance.now();
+        times.push(end - start);
+        draw_image_data(image_memory.get_image_data(), canvas);
+        setTimeout(() => paint_canvas(painter, steps - 1, image_memory, canvas, times), 10);
+    } else {
+        STOP = false;
+        add_stats(painter, image_memory.get_image_data(), times);
+        painter.free();
+    }
+};
+
+const get_val = (element) => (
+    (element.val() && parseInt(element.val())) > 0 ? parseInt(element.val()) : 1
+);
+
+$(document).ready(() => {
+    const file_upload = $("#file_upload");
+    const reset_button = $("#reset_button");
+    const k_range = $("#k_range");
+    const steps_range = $("#steps_range");
+    const javascript_button = $("#javascript_button");
+    const asmjs_button = $("#asmjs_button");
+    const wasm_button = $("#wasm_button");
     const canvas = document.getElementById("image_canvas");
 
-    $("#k_range").slider();
-    $("#steps_range").slider();
-
-    filepath2image_data(default_image_filepath).then((image_data) => {
-        const default_image_data = image_data;
-        let image_memory = null;
-        let paint_javascript = () => { };
-        let paint_asmjs = () => { };
-        let reset = () => { };
-        file_upload.onchange = (event) => {
-            if (!event) {
-                if (image_memory) { image_memory.free(); }
-                image_memory = new ImageMemory(default_image_data);
-                draw_image_data(image_memory.get_image_data(), canvas);
-            } else if (event.target.files.length > 0) {
-                const file = event.target.files[0];
-                file2image_data(file).then((image_data) => {
-                    if (image_memory) { image_memory.free(); }
-                    image_memory = new ImageMemory(image_data);
-                    draw_image_data(image_memory.get_image_data(), canvas);
-                });
-            } else {
-                return;
+    /* Setup the numeric-input elements. */
+    $(".numeric-input").each((_, numeric_input) => {
+        const input = $(numeric_input).find("input");
+        /* Only allow numbers. */
+        input.keydown((event) => {
+            return (event.ctrlKey || event.altKey
+                || (47 < event.keyCode && event.keyCode < 58 && event.shiftKey == false)
+                || (95 < event.keyCode && event.keyCode < 106)
+                || (event.keyCode == 8) || (event.keyCode == 9)
+                || (event.keyCode > 34 && event.keyCode < 40)
+                || (event.keyCode == 46));
+        });
+        const buttons = $(numeric_input).find("button");
+        const increase = $(buttons[0]);
+        const decrease = $(buttons[1]);
+        increase.click(() => input.val(get_val(input) + 1));
+        decrease.click(() => {
+            if (get_val(input) > 1) {
+                input.val(get_val(input) - 1);
             }
-            const paint = (painter_class, msg) => {
-                console.log(k_range.value);
-                const painter = new painter_class(k_range.value, image_memory);
-                paint_canvas(painter, steps_range.value, image_memory, canvas, msg);
-            };
-            javascript_button.removeEventListener("click", paint_javascript);
-            asmjs_button.removeEventListener("click", paint_asmjs);
-            reset_button.removeEventListener("click", reset);
-            paint_javascript = () => paint(JsKmeansPainter, "js");
-            paint_asmjs = () => paint(RsKmeansPainter, "rs");
-            reset = () => draw_image_data(image_memory.reset(), canvas);
-            javascript_button.addEventListener("click", paint_javascript);
-            asmjs_button.addEventListener("click", paint_asmjs);
-            reset_button.addEventListener("click", reset);
-        };
-        file_upload.onchange();
+        });
     });
-};
+
+    /* Set event handler for custom file upload. */
+    $("#file_upload_button").click(() => file_upload.click());
+
+    /* Set event handler for stop button. */
+    $("#stop_button").click(() => STOP = true);
+
+    /* Remove focus from button after being pressed. Use function to access this. */
+    $(".btn").mouseup(function () { $(this).blur(); });
+
+    /* Load the default image. */
+    filepath2image_data(default_image_filepath).then((default_image_data) => {
+        let image_memory = null;
+        /* Set event handler for reset button. */
+        reset_button.click(() => {
+            javascript_button.prop("disabled", false);
+            asmjs_button.prop("disabled", false);
+            wasm_button.prop("disabled", false);
+            draw_image_data(image_memory.reset(), canvas);
+        });
+        const new_image = (new_image_data) => {
+            javascript_button.prop("disabled", false);
+            asmjs_button.prop("disabled", false);
+            wasm_button.prop("disabled", false);
+            if (image_memory) { image_memory.free(); }
+            image_memory = new ImageMemory(new_image_data);
+            draw_image_data(image_memory.get_image_data(), canvas);
+        };
+        const paint = (painter_class) => {
+            STOP = false;
+            javascript_button.prop("disabled", true);
+            asmjs_button.prop("disabled", true);
+            wasm_button.prop("disabled", true);
+            const painter = new painter_class(get_val(k_range), image_memory);
+            paint_canvas(painter, get_val(steps_range), image_memory, canvas);
+        };
+        file_upload.change((event) => {
+            if (!event.originalEvent) { /* The default image case. */
+                new_image(default_image_data);
+            } else if (event.target.files.length > 0) { /* New file selected case. */
+                const file = event.target.files[0];
+                file2image_data(file).then((image_data) => new_image(image_data));
+            } else { return; } /* No new file selected case. */
+            javascript_button.off(); asmjs_button.off(); wasm_button.off();
+            javascript_button.click(() => paint(JsKmeansPainter));
+            asmjs_button.click(() => paint(RsKmeansPainter));
+            wasm_button.click(() => paint(RsKmeansPainter));
+        });
+        /* Trigger a change to load the default image. */
+        file_upload.change();
+    });
+});

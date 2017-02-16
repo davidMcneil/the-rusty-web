@@ -39,10 +39,10 @@ fn main() {
     use std::path::Path;
     use std::time::Instant;
 
-    let k = 5;
-    let steps = 10;
-    let in_file = "test.png";
-    let out_file = "out.png";
+    let k = 10;
+    let steps = 3;
+    let in_file = "img/default.jpg";
+    let out_file = "img/out.jpg";
 
     fn picture2observations(image: &RgbImage) -> Vec<Vec<Feature>> {
         let mut observations = Vec::new();

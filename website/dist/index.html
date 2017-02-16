@@ -9,7 +9,7 @@
 
     <title>The Rusty Web</title>
 
-    <script src="testing.js"></script>
+    <script src="the_rusty_web.js"></script>
     <script src="index.bundle.js"></script>
 </head>
 
@@ -17,7 +17,6 @@
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div class="container topnav">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -27,7 +26,6 @@
                 </button>
                 <a class="navbar-brand topnav" href="#">The Rusty Web</a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#about">About</a></li>
@@ -50,22 +48,15 @@
                         <h1>The Rusty Web</h1>
                         <h3>Targeting the web with Rust.</h3>
                         <hr class="intro-divider">
-                        <p class="lead">
-                            This website demonstrates how to target the web using
-                            <a href="https://www.rust-lang.org">Rust</a>. Specifically, how to compile Rust to asm.js or
-                            WebAssembly.
-                        </p>
                         <ul class="list-inline intro-social-buttons">
                             <li>
                                 <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/" class="btn btn-default btn-lg fixed-width-lg-btn">
-                                    <i class="fa fa-book fa-fw"></i>
-                                    <span class="network-name">Guide</span>
+                                    <i class="fa fa-book fa-fw"></i><span class="network-name">Guide</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="https://github.com/davidMcneil/the-rusty-web" class="btn btn-default btn-lg fixed-width-lg-btn">
-                                    <i class="fa fa-github fa-fw"></i>
-                                    <span class="network-name">Github</span>
+                                    <i class="fa fa-github fa-fw"></i><span class="network-name">Github</span>
                                 </a>
                             </li>
                         </ul>
@@ -80,18 +71,30 @@
     <a name="about"></a>
     <div class="content-section-a">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-5 col-sm-6">
-                    <hr class="section-heading-spacer">
-                    <div class="clearfix"></div>
-                    <h2 class="section-heading">About</h2>
-                    <p class="lead">
-                        about
-                    </p>
-                </div>
-                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                </div>
-            </div>
+            <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About</h2>
+            <p class="lead text-justify">
+                This website demonstrates a complete, albeit simple, example of integrating
+                <a href="https://www.rust-lang.org">Rust</a> code into a web application. This is accomplished by compiling
+                Rust to <a href="http://asmjs.org/">asm.js</a> or <a href="http://webassembly.org/">WebAssembly</a>.
+            </p>
+            <p class="lead text-justify">
+                The <a href="#results">demo</a> compares implementations of the
+                <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a> algorithm applied to an
+                image. The algorithm gives the resulting image a softened, painted look. Setting the
+                <i>k</i> parameter controls the number of colors and the <i>steps</i> parameter controls how many iterations
+                of the algorithm are run. After running the demo a few times see the <a href="#results">results</a> section
+                to compare the runtime information.
+            </p>
+            <p class="lead text-justify">
+            </p>
+            <p class="lead text-justify">
+                <b>Note:</b> Because the k-means clustering algorithm is a computationally intensive task (that is kind of
+                the point) it may lock up the page. In a real application, the task would either need to be broken into smaller
+                pieces or run in a background thread using
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Workers</a>.
+            </p>
         </div>
     </div>
 
@@ -99,26 +102,39 @@
     <a name="demo"></a>
     <div class="content-section-b">
         <div class="container">
-            <br/>
-            <div class="row">
-                <div class="col-md-6 text-xs-center text-sm-center text-left">
-                    <label>
-                        K (number of colors):<br/>
-                        <input id="k_range" type="text" data-slider-min="1" data-slider-max="100" data-slider-value="5" />
-                    </label>
-                    <label>
-                        Steps:<br/>
-                        <input id="steps_range" type="text" data-slider-min="0" data-slider-max="100" data-slider-value="10" />
-                    </label>
+            <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">Demo</h2>
+            <div class="row small-margin">
+                <div class="col-md-3 text-xs-center text-sm-center text-left">
+                    <div class="input-group numeric-input">
+                        <span class="input-group-addon" style="width:60px;">k</span>
+                        <input id="k_range" type="text" class="form-control input-sm" value="10" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="button"><i class="fa fa-chevron-up fa-fw"></i></button>
+                            <button class="btn btn-default btn-sm" type="button"><i class="fa fa-chevron-down fa-fw"></i></button>
+                        </span>
+                    </div>
                 </div>
-                <input id="file_upload" class="file-input-hidden" type="file" accept="image/*" />
+                <div class="col-md-3 text-xs-center text-sm-center text-left">
+                    <div class="input-group numeric-input">
+                        <span class="input-group-addon" style="width:60px;">steps</span>
+                        <input id="steps_range" type="text" class="form-control input-sm" value="3">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="button"><i class="fa fa-chevron-up fa-fw"></i></button>
+                            <button class="btn btn-default btn-sm" type="button"><i class="fa fa-chevron-down fa-fw"></i></button>
+                        </span>
+                    </div>
+                </div>
                 <div class="col-md-6 text-xs-center text-sm-center text-right">
+                    <input id="file_upload" class="file-input-hidden" type="file" accept="image/*" />
                     <div class="btn-group">
-                        <input class="btn btn-default btn-sm fixed-width-btn" type="button" value="Choose File" />
+                        <input id="file_upload_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Choose File" />
                         <input id="reset_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Reset" />
                         <input id="javascript_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="JavaScript" />
                         <input id="asmjs_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (asm.js)" />
                         <input id="wasm_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (wasm)" />
+                        <input id="stop_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Stop" />
                     </div>
                 </div>
             </div>
@@ -127,26 +143,45 @@
     </div>
 
     <!-- Results -->
+    <a name="results"></a>
     <div class="content-section-a">
         <div class="container">
-            <div class="row">
-                <a name="results"></a>
-                <p>
-                    Results
-                </p>
-            </div>
+            <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">Results</h2>
+            <table id="results_table" class="table table-bordered table-striped table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th>Painter</th>
+                        <th>k</th>
+                        <th>Steps</th>
+                        <th>Size (pixels)</th>
+                        <th>Total (ms)</th>
+                        <th>Average (ms)</th>
+                        <th>Median (ms)</th>
+                        <th>Min (ms)</th>
+                        <th>Max (ms)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="no-results-row">
+                        <td colspan="9">No results yet. Run the demo to add results.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- Benchmarks -->
-    <div class="content-section-b">
+    <a name="benchmarks"></a>
+    <div class="content-section-a">
         <div class="container">
-            <div class="row">
-                <a name="benchmarks"></a>
-                <p>
-                    Benchmarks
-                </p>
-            </div>
+            <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">Benchmarks</h2>
+            <p>
+                TODO
+            </p>
         </div>
     </div>
 </body>
