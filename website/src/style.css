@@ -1,3 +1,4 @@
+/* Classes for special numeric input. */
 .numeric-input {
     margin-right: 10px;
     max-width: 200px;
@@ -13,6 +14,7 @@
     margin-bottom: 5px;
 }
 
+/* Classes for controls. */
 .buttons-container {
     margin-bottom: 5px;
 }
@@ -45,6 +47,7 @@
     }
 }
 
+/* Classes for tables. */
 .table-container {
     display: block;
     overflow: auto;

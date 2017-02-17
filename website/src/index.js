@@ -97,13 +97,17 @@ const add_stats = (painter, image_data, times) => {
 
 const paint_canvas = (painter, steps, image_memory, canvas, times = []) => {
     if (steps > 0 && !STOP) {
-        const start = performance.now();
-        painter.step(1);
-        const end = performance.now();
-        times.push(end - start);
-        draw_image_data(image_memory.get_image_data(), canvas);
-        setTimeout(() => paint_canvas(painter, steps - 1, image_memory, canvas, times), 10);
+        $("#spinner").show();
+        setTimeout(() => {
+            const start = performance.now();
+            painter.step(1);
+            const end = performance.now();
+            times.push(end - start);
+            draw_image_data(image_memory.get_image_data(), canvas);
+            paint_canvas(painter, steps - 1, image_memory, canvas, times);
+        }, 20);
     } else {
+        $("#spinner").hide();
         STOP = false;
         add_stats(painter, image_memory.get_image_data(), times);
         painter.free();
