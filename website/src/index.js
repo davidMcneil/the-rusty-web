@@ -4,7 +4,7 @@ import $ from "jquery";
 import "./template/bootstrap.min.js";
 import { ImageMemory } from "./image_memory";
 import { JsKmeansPainter } from "./js_kmeans_painter";
-import { RsKmeansPainter } from "./rs_kmeans_painter";
+import { AsmjsKmeansPainter } from "./asmjs_kmeans_painter";
 /* CSS Imports */
 import "./template/bootstrap.css";
 import "./template/landing-page.css";
@@ -191,8 +191,8 @@ $(document).ready(() => {
             } else { return; } /* No new file selected case. */
             javascript_button.off(); asmjs_button.off(); wasm_button.off();
             javascript_button.click(() => paint(JsKmeansPainter));
-            asmjs_button.click(() => paint(RsKmeansPainter));
-            wasm_button.click(() => paint(RsKmeansPainter));
+            asmjs_button.click(() => paint(AsmjsKmeansPainter));
+            wasm_button.click(() => paint(AsmjsKmeansPainter));
         });
         /* Trigger a change to load the default image. */
         file_upload.change();

@@ -1,6 +1,48 @@
-td {
-    font-weight: normal;
-    text-align: right;
+.numeric-input {
+    margin-right: 10px;
+    max-width: 200px;
+}
+
+.numeric-input-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    align-content: flex-start;
+    margin-bottom: 5px;
+}
+
+.buttons-container {
+    margin-bottom: 5px;
+}
+
+.controls-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    align-content: flex-start;
+}
+
+@media (max-width: 1200px) {
+    .controls-container {
+        justify-content: center;
+    }
+
+    .numeric-input-container {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .buttons-container {
+        text-align: center;
+    }
+
+    .numeric-input {
+        margin-right: 0px;
+    }
 }
 
 .table-container {
@@ -9,16 +51,17 @@ td {
     max-height: 400px;
 }
 
+.table-container td {
+    font-weight: normal;
+    text-align: right;
+}
+
 .text-justify {
     text-align: justify;
 }
 
 .no-results-row td {
     text-align: center;
-}
-
-.small-margin {
-    margin-bottom: 5px;
 }
 
 .file-input-hidden {
@@ -33,90 +76,4 @@ td {
 
 .fixed-width-lg-btn {
     width: 140px;
-}
-
-/* Add responsive classes for text align */
-.text-xs-left-not, .text-sm-left-not, .text-md-left-not, .text-lg-left-not {
-    text-align: left;
-}
-.text-xs-center-not, .text-sm-center-not, .text-md-center-not, .text-lg-center-not {
-    text-align: center;
-}
-.text-xs-right-not, .text-sm-right-not, .text-md-right-not, .text-lg-right-not {
-    text-align: right;
-}
-.text-xs-justify-not, .text-sm-justify-not, .text-md-justify-not, .text-lg-justify-not {
-    text-align: justify;
-}
-
-@media (max-width: 767px) {
-    .text-xs-left-not, .text-xs-center-not, .text-xs-right-not, .text-xs-justify-not {
-        text-align: inherit;
-    }
-    .text-xs-left {
-        text-align: left;
-    }
-    .text-xs-center {
-        text-align: center;
-    }
-    .text-xs-right {
-        text-align: right;
-    }
-    .text-xs-justify {
-        text-align: justify;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-    .text-sm-left-not, .text-sm-center-not, .text-sm-right-not, .text-sm-justify-not {
-        text-align: inherit;
-    }
-    .text-sm-left {
-        text-align: left;
-    }
-    .text-sm-center {
-        text-align: center;
-    }
-    .text-sm-right {
-        text-align: right;
-    }
-    .text-sm-justify {
-        text-align: justify;
-    }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-    .text-md-left-not, .text-md-center-not, .text-md-right-not, .text-md-justify-not {
-        text-align: inherit;
-    }
-    .text-md-left {
-        text-align: left;
-    }
-    .text-md-center {
-        text-align: center;
-    }
-    .text-md-right {
-        text-align: right;
-    }
-    .text-md-justify {
-        text-align: justify;
-    }
-}
-
-@media (min-width: 1200px) {
-    .text-lg-left-not, .text-lg-center-not, .text-lg-right-not, .text-lg-justify-not {
-        text-align: inherit;
-    }
-    .text-lg-left {
-        text-align: left;
-    }
-    .text-lg-center {
-        text-align: center;
-    }
-    .text-lg-right {
-        text-align: right;
-    }
-    .text-lg-justify {
-        text-align: justify;
-    }
 }
