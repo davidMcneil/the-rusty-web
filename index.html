@@ -105,8 +105,8 @@
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">Demo</h2>
-            <div class="row small-margin">
-                <div class="col-md-3 text-xs-center text-sm-center text-left">
+            <div class="controls-container">
+                <div class="numeric-input-container">
                     <div class="input-group numeric-input">
                         <span class="input-group-addon" style="width:60px;">k</span>
                         <input id="k_range" type="text" class="form-control input-sm" value="10" />
@@ -115,8 +115,6 @@
                             <button class="btn btn-default btn-sm" type="button"><i class="fa fa-chevron-down fa-fw"></i></button>
                         </span>
                     </div>
-                </div>
-                <div class="col-md-3 text-xs-center text-sm-center text-left">
                     <div class="input-group numeric-input">
                         <span class="input-group-addon" style="width:60px;">steps</span>
                         <input id="steps_range" type="text" class="form-control input-sm" value="3">
@@ -126,16 +124,14 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-md-6 text-xs-center text-sm-center text-right">
+                <div class="buttons-container">
                     <input id="file_upload" class="file-input-hidden" type="file" accept="image/*" />
-                    <div class="btn-group">
-                        <input id="file_upload_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Choose File" />
-                        <input id="reset_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Reset" />
-                        <input id="javascript_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="JavaScript" />
-                        <input id="asmjs_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (asm.js)" />
-                        <input id="wasm_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (wasm)" />
-                        <input id="stop_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Stop" />
-                    </div>
+                    <input id="file_upload_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Choose File" />
+                    <input id="reset_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Reset" />
+                    <input id="javascript_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="JavaScript" />
+                    <input id="asmjs_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (asm.js)" />
+                    <input id="wasm_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Rust (wasm)" />
+                    <input id="stop_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Stop" />
                 </div>
             </div>
             <canvas id="image_canvas" style="width:100%"></canvas>
