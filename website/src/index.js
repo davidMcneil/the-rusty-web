@@ -160,6 +160,9 @@ $(document).ready(() => {
     /* Remove focus from button after being pressed. Use function to access this. */
     $(".btn").mouseup(function () { $(this).blur(); });
 
+    /* wasm is currently not implemented. */
+    wasm_button.prop("disabled", true);
+
     /* Load the default image. */
     filepath2image_data(default_image_filepath).then((default_image_data) => {
         let image_memory = null;
@@ -167,13 +170,11 @@ $(document).ready(() => {
         reset_button.click(() => {
             javascript_button.prop("disabled", false);
             asmjs_button.prop("disabled", false);
-            wasm_button.prop("disabled", false);
             draw_image_data(image_memory.reset(), canvas);
         });
         const new_image = (new_image_data) => {
             javascript_button.prop("disabled", false);
             asmjs_button.prop("disabled", false);
-            wasm_button.prop("disabled", false);
             if (image_memory) { image_memory.free(); }
             image_memory = new ImageMemory(new_image_data);
             draw_image_data(image_memory.get_image_data(), canvas);
@@ -182,7 +183,6 @@ $(document).ready(() => {
             STOP = false;
             javascript_button.prop("disabled", true);
             asmjs_button.prop("disabled", true);
-            wasm_button.prop("disabled", true);
             const painter = new painter_class(get_val(k_range), image_memory);
             paint_canvas(painter, get_val(steps_range), image_memory, canvas);
         };
@@ -193,10 +193,9 @@ $(document).ready(() => {
                 const file = event.target.files[0];
                 file2image_data(file).then((image_data) => new_image(image_data));
             } else { return; } /* No new file selected case. */
-            javascript_button.off(); asmjs_button.off(); wasm_button.off();
+            javascript_button.off(); asmjs_button.off();
             javascript_button.click(() => paint(JsKmeansPainter));
             asmjs_button.click(() => paint(AsmjsKmeansPainter));
-            wasm_button.click(() => paint(AsmjsKmeansPainter));
         });
         /* Trigger a change to load the default image. */
         file_upload.change();
