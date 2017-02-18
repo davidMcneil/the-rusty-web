@@ -77,22 +77,25 @@
             <p class="lead text-justify">
                 This website demonstrates a complete, albeit simple, example of integrating
                 <a href="https://www.rust-lang.org">Rust</a> code into a web application. This is accomplished by compiling
-                Rust to <a href="http://asmjs.org/">asm.js</a> or <a href="http://webassembly.org/">WebAssembly</a>.
+                Rust to <a href="http://asmjs.org/">asm.js</a> or <a href="http://webassembly.org/">WebAssembly</a>. The
+                basic design pattern this site explores is using Rust to implement a core computationally intensive portion
+                of an app while using existing web technolgoies to handle the user interface. The
+                <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">guide</a> explores this design pattern in
+                detail.
             </p>
             <p class="lead text-justify">
                 The <a href="#results">demo</a> compares implementations of the
-                <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a> algorithm applied to an
-                image. The algorithm gives the resulting image a softened, painted look. Setting the
+                <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a> algorithm(this example's
+                computationally intensive task) applied to an image. The algorithm gives the resulting image a softened,
+                painted look. Setting the
                 <i>k</i> parameter controls the number of colors and the <i>steps</i> parameter controls how many iterations
-                of the algorithm are run. After running the demo a few times see the <a href="#results">results</a> section
-                to compare the runtime information.
+                of the algorithm are run. After running the demo a few times, see the <a href="#results">results</a> section
+                to compare the runtimes.
             </p>
             <p class="lead text-justify">
-            </p>
-            <p class="lead text-justify">
-                <b>Note:</b> Because the k-means clustering algorithm is a computationally intensive task (that is kind of
-                the point) it may lock up the page. In a real application, the task would either need to be broken into smaller
-                pieces or run in a background thread using
+                <b>Note:</b> The k-means clustering may lock up the page (depanding on how powerfull of a machine you are
+                using). In a real application, the task would either need to be broken into smaller pieces or run in a background
+                thread using
                 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Workers</a>.
             </p>
         </div>
