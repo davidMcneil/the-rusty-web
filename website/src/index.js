@@ -20,6 +20,7 @@ const image2image_data = (image) => {
     const temp_canvas_context = temp_canvas.getContext("2d");
     temp_canvas.width = image.width;
     temp_canvas.height = image.height;
+    console.log(image.width);
     temp_canvas_context.drawImage(image, 0, 0);
     return temp_canvas_context.getImageData(0, 0, image.width, image.height);
 };
@@ -28,6 +29,7 @@ const filepath2image_data = (filepath) => (
     new Promise((resolve, reject) => {
         const image = new Image();
         image.onload = () => {
+            console.log(image);
             resolve(image2image_data(image));
         };
         image.onabort = (event) => (reject(event));
@@ -42,6 +44,7 @@ const file2image_data = (file) => (
         const image = new Image();
         reader.onload = (event) => {
             image.src = event.target.result;
+            console.log(image.src);
             resolve(image2image_data(image));
         };
         reader.onabort = (event) => (reject(event));
@@ -157,7 +160,7 @@ $(document).ready(() => {
     /* Set event handler for stop button. */
     $("#stop_button").click(() => STOP = true);
 
-    /* Remove focus from button after being pressed. Use function to access this. */
+    /* Remove focus from button after being pressed. Use function to access 'this'. */
     $(".btn").mouseup(function () { $(this).blur(); });
 
     /* wasm is currently not implemented. */
