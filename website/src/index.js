@@ -20,7 +20,6 @@ const image2image_data = (image) => {
     const temp_canvas_context = temp_canvas.getContext("2d");
     temp_canvas.width = image.width;
     temp_canvas.height = image.height;
-    console.log(image.width);
     temp_canvas_context.drawImage(image, 0, 0);
     return temp_canvas_context.getImageData(0, 0, image.width, image.height);
 };
@@ -28,12 +27,9 @@ const image2image_data = (image) => {
 const filepath2image_data = (filepath) => (
     new Promise((resolve, reject) => {
         const image = new Image();
-        image.onload = () => {
-            console.log(image);
-            resolve(image2image_data(image));
-        };
-        image.onabort = (event) => (reject(event));
-        image.onerror = (event) => (reject(event));
+        image.onload = () => resolve(image2image_data(image));
+        image.onabort = (event) => reject(event);
+        image.onerror = (event) => reject(event);
         image.src = filepath;
     })
 );
@@ -43,12 +39,11 @@ const file2image_data = (file) => (
         const reader = new FileReader();
         const image = new Image();
         reader.onload = (event) => {
+            image.onload = () => resolve(image2image_data(image));
             image.src = event.target.result;
-            console.log(image.src);
-            resolve(image2image_data(image));
         };
-        reader.onabort = (event) => (reject(event));
-        reader.onerror = (event) => (reject(event));
+        reader.onabort = (event) => reject(event);
+        reader.onerror = (event) => reject(event);
         reader.readAsDataURL(file);
     })
 );
@@ -69,17 +64,14 @@ const draw_image_data = (image_data, canvas) => {
 const add_stats = (painter, image_data, times) => {
     times.sort();
     const length = times.length;
-    let total = 0;
-    const min = times[0];
-    const max = times[length - 1];
-    for (let time of times) {
-        total += time;
-    }
+    let total = times.reduce((acc, val) => acc + val, 0);
+    const average = total / length;
     const half = Math.floor(length / 2);
     let median;
     if (length % 2) { median = times[half]; }
     else { median = (times[half - 1] + times[half]) / 2.0; }
-    const average = total / length;
+    const min = times[0];
+    const max = times[length - 1];
     if ($("#results_table tbody tr").first().hasClass("no-results-row")) {
         $("#results_table tr:last").remove();
     }

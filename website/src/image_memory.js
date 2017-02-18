@@ -24,7 +24,9 @@ export class ImageMemory {
     }
 
     get_image_data() {
-        /* !!! We may now have a new heap. !!! */
+        /* We can not simply cache img_array, but must pull it from Module's heap every time.
+           This is because our heap array may have grown and been allocated a new memory
+           location. */
         let img_array = new Uint8ClampedArray(Module.HEAPU8.buffer, this.ptr, this.byte_count);
         return new ImageData(img_array, this.width, this.height);
     }
