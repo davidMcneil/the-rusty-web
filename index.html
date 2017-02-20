@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>The Rusty Web</title>
+    <link rel="shortcut icon" href="favicon.ico" />
 
-    <script src="the_rusty_web.js"></script>
+    <script src="rust_libs/the_rusty_web_asmjs.js"></script>
     <script src="index.bundle.js"></script>
 </head>
 
@@ -78,25 +79,35 @@
                 This website demonstrates a complete, albeit simple, example of integrating
                 <a href="https://www.rust-lang.org">Rust</a> code into a web application. This is accomplished by compiling
                 Rust to <a href="http://asmjs.org/">asm.js</a> or <a href="http://webassembly.org/">WebAssembly</a>. The
-                basic design pattern this site explores is using Rust to implement a core computationally intensive portion
-                of an app while using existing web technolgoies to handle the user interface. The
+                basic design pattern this site explores uses Rust to implement CPU bound portions of an app while using existing
+                web technologies to handle user facing I/O bound pieces. The
                 <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">guide</a> explores this design pattern in
                 detail.
             </p>
             <p class="lead text-justify">
                 The <a href="#results">demo</a> compares implementations of the
-                <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a> algorithm(this example's
-                computationally intensive task) applied to an image. The algorithm gives the resulting image a softened,
-                painted look. Setting the
-                <i>k</i> parameter controls the number of colors and the <i>steps</i> parameter controls how many iterations
-                of the algorithm are run. After running the demo a few times, see the <a href="#results">results</a> section
-                to compare the runtimes.
+                <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a> algorithm (this example's
+                CPU bound task) applied to an image. The algorithm gives the resulting image a softened, painted look. Setting
+                the
+                <i>k</i> parameter controls the number of colors and the <i>steps</i> parameter controls the number of iterations.
+                After running the demo a few times, see the <a href="#results">results</a> section to compare runtimes.
             </p>
             <p class="lead text-justify">
-                <b>Note:</b> The k-means clustering may lock up the page (depanding on how powerfull of a machine you are
-                using). In a real application, the task would either need to be broken into smaller pieces or run in a background
-                thread using
+                Whereas this website focuses on comparing runtimes, there are other benefits this design pattern offers including reducing
+                website asset size, reducing JavaScript "compile" times, and the ability to use Rust!
+            </p>
+            <p class="lead text-justify">
+                <b>Note:</b> The demo may lock up the page. This is especially true on mobile devices. Consider uploading
+                a smaller image and keeping the <i>k</i> and <i>steps</i> parameters small. In a real application, the task
+                would either need to be broken into smaller pieces or run in a background thread using
                 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Workers</a>.
+            </p>
+            <p class="lead" style="text-align:center;color:brown;"><strong>*** Disclaimer ***</strong></p>
+            <p class="lead text-justify" style="color:brown;">
+                These are all very young technologies. Many of the potential benfits offered by this design pattern have not yet been realized.
+                A main purpose of this site is to track these technologies as they develop. One of the biggest shortcomings
+                right now is an inability to compile to WebAssembly with release level optimizations which considerably impacts
+                runtime performance.
             </p>
         </div>
     </div>
@@ -111,6 +122,11 @@
                 Demo
                 <i id="spinner" class="fa fa-cog fa-spin" style="display:none" aria-hidden="true"></i>
             </h2>
+            <div id="web_assembly_support" class="alert alert-warning" style="display:none">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Warning:</strong>
+                <span style="font-weight:normal">Native WebAssembly support is not available in this browser, but you can still run the JavaScript and asm.js implementations.</span>
+            </div>
             <div class="controls-container">
                 <div class="numeric-input-container">
                     <div class="input-group numeric-input">
@@ -140,7 +156,7 @@
                     <input id="stop_button" class="btn btn-default btn-sm fixed-width-btn" type="button" value="Stop" />
                 </div>
             </div>
-            <canvas id="image_canvas"></canvas>
+            <canvas id="image_canvas" style="width:100%"></canvas>
         </div>
     </div>
 
