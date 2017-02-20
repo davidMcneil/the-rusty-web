@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const webpack_dev_server = require("webpack-dev-server");
 
 module.exports = {
+    target: "web",
     entry: {
         index: "./src/index.js",
     },
@@ -46,6 +47,7 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
+            /* Make sure jQuery is available globally. */
             jQuery: "jquery",
             $: "jquery",
             jquery: "jquery"

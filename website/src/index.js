@@ -2,9 +2,13 @@
 import $ from "jquery";
 /* JavaScript Imports */
 import "./template/bootstrap.min.js";
+import { load_wasm_module, native_support } from "./modules";
+import { AsmjsModule } from "./modules";
+import { WasmModule } from "./modules";
 import { ImageMemory } from "./image_memory";
 import { JsKmeansPainter } from "./js_kmeans_painter";
 import { AsmjsKmeansPainter } from "./asmjs_kmeans_painter";
+import { WasmKmeansPainter } from "./wasm_kmeans_painter";
 /* CSS Imports */
 import "./template/bootstrap.css";
 import "./template/landing-page.css";
@@ -155,29 +159,42 @@ $(document).ready(() => {
     /* Remove focus from button after being pressed. Use function to access 'this'. */
     $(".btn").mouseup(function () { $(this).blur(); });
 
-    /* wasm is currently not implemented. */
-    wasm_button.prop("disabled", true);
-
     /* Load the default image. */
-    filepath2image_data(default_image_filepath).then((default_image_data) => {
-        let image_memory = null;
-        /* Set event handler for reset button. */
-        reset_button.click(() => {
-            javascript_button.prop("disabled", false);
-            asmjs_button.prop("disabled", false);
-            draw_image_data(image_memory.reset(), canvas);
-        });
+    load_wasm_module().then(() => {
+        if (!native_support()) {
+            $("#web_assembly_support").show();
+            wasm_button.prop("disabled", true);
+        }
+        return filepath2image_data(default_image_filepath);
+    }).then((default_image_data) => {
+        let asmjs_image_memory = null;
+        let wasm_image_memory = null;
         const new_image = (new_image_data) => {
             javascript_button.prop("disabled", false);
             asmjs_button.prop("disabled", false);
-            if (image_memory) { image_memory.free(); }
-            image_memory = new ImageMemory(new_image_data);
-            draw_image_data(image_memory.get_image_data(), canvas);
+            if (asmjs_image_memory) { asmjs_image_memory.free(); }
+            asmjs_image_memory = new ImageMemory(new_image_data, AsmjsModule);
+            if (native_support()) {
+                if (wasm_image_memory) { wasm_image_memory.free(); }
+                wasm_button.prop("disabled", false);
+                wasm_image_memory = new ImageMemory(new_image_data, WasmModule);
+            }
+            draw_image_data(asmjs_image_memory.get_image_data(), canvas);
         };
+        /* Set event handler for reset button. */
+        reset_button.click(() => {
+            if (native_support()) { wasm_image_memory.reset(); }
+            new_image(asmjs_image_memory.reset(), canvas);
+        });
         const paint = (painter_class) => {
             STOP = false;
             javascript_button.prop("disabled", true);
             asmjs_button.prop("disabled", true);
+            wasm_button.prop("disabled", true);
+            let image_memory = asmjs_image_memory;
+            if (painter_class === WasmKmeansPainter) {
+                image_memory = wasm_image_memory;
+            }
             const painter = new painter_class(get_val(k_range), image_memory);
             paint_canvas(painter, get_val(steps_range), image_memory, canvas);
         };
@@ -188,9 +205,10 @@ $(document).ready(() => {
                 const file = event.target.files[0];
                 file2image_data(file).then((image_data) => new_image(image_data));
             } else { return; } /* No new file selected case. */
-            javascript_button.off(); asmjs_button.off();
+            javascript_button.off(); asmjs_button.off(); wasm_button.off();
             javascript_button.click(() => paint(JsKmeansPainter));
             asmjs_button.click(() => paint(AsmjsKmeansPainter));
+            wasm_button.click(() => paint(WasmKmeansPainter));
         });
         /* Trigger a change to load the default image. */
         file_upload.change();

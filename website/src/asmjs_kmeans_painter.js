@@ -1,7 +1,8 @@
-/* global Module */
-const create = Module.cwrap("kmeans_painter_create", "number", ["number", "number", "number"]);
-const step = Module.cwrap("kmeans_painter_step", null, ["number", "number"]);
-const destroy = Module.cwrap("kmeans_painter_destroy", null, ["number"]);
+import { AsmjsModule } from "./modules";
+
+const create = AsmjsModule.cwrap("kmeans_painter_create", "number", ["number", "number", "number"]);
+const step = AsmjsModule.cwrap("kmeans_painter_step", null, ["number", "number"]);
+const destroy = AsmjsModule.cwrap("kmeans_painter_destroy", null, ["number"]);
 
 export class AsmjsKmeansPainter {
     constructor(k, image_memory) {
