@@ -39,7 +39,7 @@ export class Kmeans {
     }
 
     train(observations, steps) {
-        // Add randomly initialized centroids if needed.
+        // If needed add randomly initialized centroids.
         while (this.centroids.length < this.k) {
             const random_index = Math.floor(Math.random() * observations.length);
             const random_observation = observations[random_index];

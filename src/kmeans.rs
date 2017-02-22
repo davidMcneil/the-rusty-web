@@ -75,7 +75,7 @@ impl Kmeans {
     }
 
     pub fn train(self: &mut Kmeans, observations: &[Vec<Feature>], steps: u16) {
-        // Add randomly initialized centroids if needed.
+        // If needed add randomly initialized centroids.
         while self.centroids.len() < self.k as usize {
             let random_observation = rand::thread_rng()
                 .choose(observations)
@@ -101,8 +101,8 @@ impl Kmeans {
                     .add_observation(o);
             }
             // Recalculate the centroid for each cluster.
-            for cluster in &mut clusters {
-                cluster.set_centroid();
+            for c in &mut clusters {
+                c.set_centroid();
             }
             step += 1;
         }
@@ -112,7 +112,6 @@ impl Kmeans {
             self.centroids.push(centroid.clone());
         }
     }
-
 
     pub fn predict(self: &Kmeans, observation: &[Feature]) -> Vec<Feature> {
         self.centroids

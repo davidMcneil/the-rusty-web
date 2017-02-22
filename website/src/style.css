@@ -47,6 +47,12 @@
     }
 }
 
+@media (min-width: 992px) {
+    img {
+        margin-top: 60px;
+    }
+}
+
 /* Classes for tables. */
 .table-container {
     display: block;
