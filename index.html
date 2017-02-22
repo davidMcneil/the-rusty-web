@@ -104,10 +104,11 @@
             </p>
             <p class="lead" style="text-align:center;color:brown;"><strong>*** Disclaimer ***</strong></p>
             <p class="lead text-justify" style="color:brown;">
-                These are all very young technologies. Many of the potential benfits offered by this design pattern have not yet been realized.
-                A main purpose of this site is to track these technologies as they develop. One of the biggest shortcomings
-                right now is an inability to compile to WebAssembly with release level optimizations which considerably impacts
-                runtime performance.
+                These are all very young technologies. Many of the potential benefits offered by this design pattern have not yet been realized.
+                A primary purpose of this site is to track these technologies as they develop. One of the biggest shortcomings
+                right now is an inability to compile this project to WebAssembly with release level optimizations. This is
+                the <a href="https://github.com/rust-lang/rust/issues/38558">issue</a>. This considerably
+                impacts runtime performance.
             </p>
         </div>
     </div>
@@ -196,14 +197,26 @@
     <a name="benchmarks"></a>
     <div class="content-section-a">
         <div class="container">
-            <hr class="section-heading-spacer">
-            <div class="clearfix"></div>
-            <h2 class="section-heading">Benchmarks</h2>
-            <p>
-                TODO
-            </p>
+            <div class="row">
+                <div class="col-md-5">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Benchmarks</h2>
+                    <p class="lead text-justify">
+                        These benchmarks show the average step duration of ten steps for <i>k</i> values ranging from two
+                        to sixty-four (smaller values are better). Clearly, there can be a significant performance benefit
+                        in using asm.js. For examle, using Firefox with a <i>k</i> value of sixty-four produces a 2.5 times
+                        speedup compared to the JavaScript version. The reason why the Chrome asm.js version is so slow is
+                        unclear. WebAssembly was not included because, as discuessed in the disclaimer, it is not currently
+                        possible to compile this project using release level optimizations. Because these technologies are
+                        so young, these benchmarks serve as a lower bound of what will be possible in the future.
+                    </p>
+                </div>
+                <div class="col-md-7 text-center">
+                    <img class="img-responsive" src="benchmarks.png" alt="">
+                </div>
+            </div>
         </div>
-    </div>
 </body>
 
 </html>
