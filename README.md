@@ -1,9 +1,7 @@
 # The Rusty Web
----------------
 
-[Website](https://davidmcneil.github.io/the-rusty-web/)
-
-[Guide](https://davidmcneil.gitbooks.io/the-rusty-web/content/)
+[![Website](https://img.shields.io/badge/website-The_Rusty_Web-red.svg)](https://davidmcneil.github.io/the-rusty-web/)
+[![Guide](https://img.shields.io/badge/guide-GitBook-blue.svg)](https://davidmcneil.gitbooks.io/the-rusty-web/content/)
 
 ## About
 This project demonstrates a complete, albeit simple, example of integrating
@@ -34,7 +32,7 @@ From the top level of the project run
 or
 > cargo run --release
 
-you should now be able to see the resulting image at 'img/out.jpg'.
+The resulting painted image can be found at *img/out.jpg*.
 
 ### Running on the Web
 From the top level of the project...
@@ -50,10 +48,10 @@ From the 'website' directory...
 Install node dependencies
 > npm install
 
-Build the website, build results can be found in the 'website/dist'
+Build the website, build results can be found in the *website/dist*
 > npm run build
 
-or build the website in release mode, build results can be found in the 'website/dist'
+or build the website in release mode, build results can be found in the *website/dist*
 > npm run build-release
 
 or start a web server, website is served at [http://localhost:9000/](http://localhost:9000/)
