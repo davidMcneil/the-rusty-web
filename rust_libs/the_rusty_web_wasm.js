@@ -31,9 +31,9 @@ function integrateWasmJS(Module) {
   var method = Module['wasmJSMethod'] || (Module['wasmJSMethod'] || "native-wasm") || 'native-wasm'; // by default, use native support
   Module['wasmJSMethod'] = method;
 
-  var wasmTextFile = Module['wasmTextFile'] || "the_rusty_web-8ed31da398ef3797.wast";
-  var wasmBinaryFile = Module['wasmBinaryFile'] || "the_rusty_web-8ed31da398ef3797.wasm";
-  var asmjsCodeFile = Module['asmjsCodeFile'] || "the_rusty_web-8ed31da398ef3797.asm.js";
+  var wasmTextFile = Module['wasmTextFile'] || "the_rusty_web-b581cf0ca29f15d5.wast";
+  var wasmBinaryFile = Module['wasmBinaryFile'] || "the_rusty_web-b581cf0ca29f15d5.wasm";
+  var asmjsCodeFile = Module['asmjsCodeFile'] || "the_rusty_web-b581cf0ca29f15d5.asm.js";
 
   // utilities
 
@@ -1893,16 +1893,16 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = 1024;
 
-STATICTOP = STATIC_BASE + 19808;
+STATICTOP = STATIC_BASE + 15440;
   /* global initializers */  __ATINIT__.push();
   
 
-memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "the_rusty_web-8ed31da398ef3797.js.mem" : null;
+memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "the_rusty_web-b581cf0ca29f15d5.js.mem" : null;
 
 
 
 
-var STATIC_BUMP = 19808;
+var STATIC_BUMP = 15440;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -2040,6 +2040,9 @@ function copyTempDouble(ptr) {
       }
       throw ptr;
     }
+
+   
+  Module["_memset"] = _memset;
 
   function __Unwind_FindEnclosingFunction() {
       return 0; // we cannot succeed
@@ -5579,47 +5582,11 @@ staticSealed = true; // seal the static portion of memory
 
 
 
-Module['wasmTableSize'] = 728;
+Module['wasmTableSize'] = 190;
 
 function invoke_iiii(index,a1,a2,a3) {
   try {
     return Module["dynCall_iiii"](index,a1,a2,a3);
-  } catch(e) {
-    if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
-  }
-}
-
-function invoke_viiiii(index,a1,a2,a3,a4,a5) {
-  try {
-    Module["dynCall_viiiii"](index,a1,a2,a3,a4,a5);
-  } catch(e) {
-    if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
-  }
-}
-
-function invoke_d(index) {
-  try {
-    return Module["dynCall_d"](index);
-  } catch(e) {
-    if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
-  }
-}
-
-function invoke_vid(index,a1,a2) {
-  try {
-    Module["dynCall_vid"](index,a1,a2);
-  } catch(e) {
-    if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
-  }
-}
-
-function invoke_di(index,a1) {
-  try {
-    return Module["dynCall_di"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
     asm["setThrew"](1, 0);
@@ -5638,15 +5605,6 @@ function invoke_i(index) {
 function invoke_vi(index,a1) {
   try {
     Module["dynCall_vi"](index,a1);
-  } catch(e) {
-    if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
-  }
-}
-
-function invoke_viii(index,a1,a2,a3) {
-  try {
-    Module["dynCall_viii"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
     asm["setThrew"](1, 0);
@@ -5689,15 +5647,6 @@ function invoke_v(index) {
   }
 }
 
-function invoke_viid(index,a1,a2,a3) {
-  try {
-    Module["dynCall_viid"](index,a1,a2,a3);
-  } catch(e) {
-    if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
-  }
-}
-
 function invoke_viiii(index,a1,a2,a3,a4) {
   try {
     Module["dynCall_viiii"](index,a1,a2,a3,a4);
@@ -5725,9 +5674,9 @@ function invoke_iiiiii(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_dii(index,a1,a2) {
+function invoke_viii(index,a1,a2,a3) {
   try {
-    return Module["dynCall_dii"](index,a1,a2);
+    Module["dynCall_viii"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
     asm["setThrew"](1, 0);
@@ -5736,7 +5685,7 @@ function invoke_dii(index,a1,a2) {
 
 Module.asmGlobalArg = { "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array, "NaN": NaN, "Infinity": Infinity, "byteLength": byteLength };
 
-Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "invoke_iiii": invoke_iiii, "invoke_viiiii": invoke_viiiii, "invoke_d": invoke_d, "invoke_vid": invoke_vid, "invoke_di": invoke_di, "invoke_i": invoke_i, "invoke_vi": invoke_vi, "invoke_viii": invoke_viii, "invoke_vii": invoke_vii, "invoke_ii": invoke_ii, "invoke_ji": invoke_ji, "invoke_v": invoke_v, "invoke_viid": invoke_viid, "invoke_viiii": invoke_viiii, "invoke_iii": invoke_iii, "invoke_iiiiii": invoke_iiiiii, "invoke_dii": invoke_dii, "_pthread_cleanup_pop": _pthread_cleanup_pop, "_pthread_key_create": _pthread_key_create, "_pthread_cleanup_push": _pthread_cleanup_push, "__Unwind_FindEnclosingFunction": __Unwind_FindEnclosingFunction, "_emscripten_get_callstack_js": _emscripten_get_callstack_js, "___gxx_personality_v0": ___gxx_personality_v0, "_pthread_rwlock_unlock": _pthread_rwlock_unlock, "___cxa_find_matching_catch_2": ___cxa_find_matching_catch_2, "___cxa_find_matching_catch": ___cxa_find_matching_catch, "___buildEnvironment": ___buildEnvironment, "_pthread_cond_init": _pthread_cond_init, "__Unwind_GetIPInfo": __Unwind_GetIPInfo, "_pthread_mutexattr_destroy": _pthread_mutexattr_destroy, "_llvm_sqrt_f64": _llvm_sqrt_f64, "___setErrNo": ___setErrNo, "_pthread_key_delete": _pthread_key_delete, "___cxa_allocate_exception": ___cxa_allocate_exception, "_pthread_rwlock_rdlock": _pthread_rwlock_rdlock, "___resumeException": ___resumeException, "__ZSt18uncaught_exceptionv": __ZSt18uncaught_exceptionv, "_pthread_condattr_setclock": _pthread_condattr_setclock, "_llvm_powi_f64": _llvm_powi_f64, "_pthread_getspecific": _pthread_getspecific, "_emscripten_memcpy_big": _emscripten_memcpy_big, "__emscripten_traverse_stack": __emscripten_traverse_stack, "_pthread_mutex_destroy": _pthread_mutex_destroy, "_abort": _abort, "_pthread_condattr_init": _pthread_condattr_init, "_pthread_mutexattr_settype": _pthread_mutexattr_settype, "_getenv": _getenv, "_pthread_condattr_destroy": _pthread_condattr_destroy, "___syscall54": ___syscall54, "___unlock": ___unlock, "___syscall140": ___syscall140, "_pthread_mutexattr_init": _pthread_mutexattr_init, "_pthread_setspecific": _pthread_setspecific, "_dladdr": _dladdr, "___cxa_throw": ___cxa_throw, "___lock": ___lock, "___syscall6": ___syscall6, "___syscall5": ___syscall5, "___syscall4": ___syscall4, "___syscall3": ___syscall3, "_pthread_cond_destroy": _pthread_cond_destroy, "_llvm_trap": _llvm_trap, "_pthread_mutex_init": _pthread_mutex_init, "__Unwind_Backtrace": __Unwind_Backtrace, "___syscall146": ___syscall146, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT };
+Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "invoke_iiii": invoke_iiii, "invoke_i": invoke_i, "invoke_vi": invoke_vi, "invoke_vii": invoke_vii, "invoke_ii": invoke_ii, "invoke_ji": invoke_ji, "invoke_v": invoke_v, "invoke_viiii": invoke_viiii, "invoke_iii": invoke_iii, "invoke_iiiiii": invoke_iiiiii, "invoke_viii": invoke_viii, "_pthread_cleanup_pop": _pthread_cleanup_pop, "_pthread_key_create": _pthread_key_create, "_pthread_cleanup_push": _pthread_cleanup_push, "__Unwind_FindEnclosingFunction": __Unwind_FindEnclosingFunction, "_emscripten_get_callstack_js": _emscripten_get_callstack_js, "___gxx_personality_v0": ___gxx_personality_v0, "_pthread_rwlock_unlock": _pthread_rwlock_unlock, "___cxa_find_matching_catch_2": ___cxa_find_matching_catch_2, "___cxa_find_matching_catch": ___cxa_find_matching_catch, "___buildEnvironment": ___buildEnvironment, "_pthread_cond_init": _pthread_cond_init, "__Unwind_GetIPInfo": __Unwind_GetIPInfo, "_pthread_mutexattr_destroy": _pthread_mutexattr_destroy, "_llvm_sqrt_f64": _llvm_sqrt_f64, "___setErrNo": ___setErrNo, "_pthread_key_delete": _pthread_key_delete, "___cxa_allocate_exception": ___cxa_allocate_exception, "_pthread_rwlock_rdlock": _pthread_rwlock_rdlock, "___resumeException": ___resumeException, "__ZSt18uncaught_exceptionv": __ZSt18uncaught_exceptionv, "_pthread_condattr_setclock": _pthread_condattr_setclock, "_llvm_powi_f64": _llvm_powi_f64, "_pthread_getspecific": _pthread_getspecific, "_emscripten_memcpy_big": _emscripten_memcpy_big, "__emscripten_traverse_stack": __emscripten_traverse_stack, "_pthread_mutex_destroy": _pthread_mutex_destroy, "_abort": _abort, "_pthread_condattr_init": _pthread_condattr_init, "_pthread_mutexattr_settype": _pthread_mutexattr_settype, "_getenv": _getenv, "_pthread_condattr_destroy": _pthread_condattr_destroy, "___syscall54": ___syscall54, "___unlock": ___unlock, "___syscall140": ___syscall140, "_pthread_mutexattr_init": _pthread_mutexattr_init, "_pthread_setspecific": _pthread_setspecific, "_dladdr": _dladdr, "___cxa_throw": ___cxa_throw, "___lock": ___lock, "___syscall6": ___syscall6, "___syscall5": ___syscall5, "___syscall4": ___syscall4, "___syscall3": ___syscall3, "_pthread_cond_destroy": _pthread_cond_destroy, "_llvm_trap": _llvm_trap, "_pthread_mutex_init": _pthread_mutex_init, "__Unwind_Backtrace": __Unwind_Backtrace, "___syscall146": ___syscall146, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT };
 // EMSCRIPTEN_START_ASM
 var asm =Module["asm"]// EMSCRIPTEN_END_ASM
 (Module.asmGlobalArg, Module.asmLibraryArg, buffer);
@@ -5750,7 +5699,7 @@ var _pthread_self = Module["_pthread_self"] = asm["_pthread_self"];
 var _kmeans_painter_destroy = Module["_kmeans_painter_destroy"] = asm["_kmeans_painter_destroy"];
 var _pthread_mutex_unlock = Module["_pthread_mutex_unlock"] = asm["_pthread_mutex_unlock"];
 var runPostSets = Module["runPostSets"] = asm["runPostSets"];
-var _htons = Module["_htons"] = asm["_htons"];
+var _memset = Module["_memset"] = asm["_memset"];
 var _llvm_bswap_i16 = Module["_llvm_bswap_i16"] = asm["_llvm_bswap_i16"];
 var _pthread_mutex_lock = Module["_pthread_mutex_lock"] = asm["_pthread_mutex_lock"];
 var _memcpy = Module["_memcpy"] = asm["_memcpy"];
@@ -5759,25 +5708,20 @@ var ___errno_location = Module["___errno_location"] = asm["___errno_location"];
 var _sbrk = Module["_sbrk"] = asm["_sbrk"];
 var _kmeans_painter_create = Module["_kmeans_painter_create"] = asm["_kmeans_painter_create"];
 var _free = Module["_free"] = asm["_free"];
+var _htons = Module["_htons"] = asm["_htons"];
 var _llvm_bswap_i32 = Module["_llvm_bswap_i32"] = asm["_llvm_bswap_i32"];
 var _kmeans_painter_step = Module["_kmeans_painter_step"] = asm["_kmeans_painter_step"];
 var dynCall_iiii = Module["dynCall_iiii"] = asm["dynCall_iiii"];
-var dynCall_viiiii = Module["dynCall_viiiii"] = asm["dynCall_viiiii"];
-var dynCall_d = Module["dynCall_d"] = asm["dynCall_d"];
-var dynCall_vid = Module["dynCall_vid"] = asm["dynCall_vid"];
-var dynCall_di = Module["dynCall_di"] = asm["dynCall_di"];
 var dynCall_i = Module["dynCall_i"] = asm["dynCall_i"];
 var dynCall_vi = Module["dynCall_vi"] = asm["dynCall_vi"];
-var dynCall_viii = Module["dynCall_viii"] = asm["dynCall_viii"];
 var dynCall_vii = Module["dynCall_vii"] = asm["dynCall_vii"];
 var dynCall_ii = Module["dynCall_ii"] = asm["dynCall_ii"];
 var dynCall_ji = Module["dynCall_ji"] = asm["dynCall_ji"];
 var dynCall_v = Module["dynCall_v"] = asm["dynCall_v"];
-var dynCall_viid = Module["dynCall_viid"] = asm["dynCall_viid"];
 var dynCall_viiii = Module["dynCall_viiii"] = asm["dynCall_viiii"];
 var dynCall_iii = Module["dynCall_iii"] = asm["dynCall_iii"];
 var dynCall_iiiiii = Module["dynCall_iiiiii"] = asm["dynCall_iiiiii"];
-var dynCall_dii = Module["dynCall_dii"] = asm["dynCall_dii"];
+var dynCall_viii = Module["dynCall_viii"] = asm["dynCall_viii"];
 ;
 
 Runtime.stackAlloc = asm['stackAlloc'];

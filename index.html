@@ -76,11 +76,11 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About</h2>
             <p class="lead text-justify">
-                This website demonstrates a complete, albeit simple, example of integrating
+                This project demonstrates a complete, albeit simple, example of integrating
                 <a href="https://www.rust-lang.org">Rust</a> code into a web application. This is accomplished by compiling
                 Rust to <a href="http://asmjs.org/">asm.js</a> or <a href="http://webassembly.org/">WebAssembly</a>. The
                 basic design pattern this site explores uses Rust to implement CPU bound portions of an app while using existing
-                web technologies to handle user facing I/O bound pieces. The
+                web technologies to handle user facing, I/O bound pieces. The
                 <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">guide</a> explores this design pattern in
                 detail.
             </p>
@@ -89,12 +89,13 @@
                 <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a> algorithm (this example's
                 CPU bound task) applied to an image. The algorithm gives the resulting image a softened, painted look. Setting
                 the
-                <i>k</i> parameter controls the number of colors and the <i>steps</i> parameter controls the number of iterations.
-                After running the demo a few times, see the <a href="#results">results</a> section to compare runtimes.
+                <i>k</i> parameter controls the number of colors and the <i>steps</i> parameter controls the algorithm's
+                number of iterations. After running the demo a few times, see the <a href="#results">results</a> section
+                to compare runtimes.
             </p>
             <p class="lead text-justify">
-                Whereas this website focuses on comparing runtimes, there are other benefits this design pattern offers including reducing
-                website asset size, reducing JavaScript "compile" times, and the ability to use Rust!
+                Whereas this project looks at runtime performance, there are other benefits this design pattern offers: reducing website
+                asset size, reducing JavaScript "compile" times, and the ability to use Rust!
             </p>
             <p class="lead text-justify">
                 <b>Note:</b> The demo may lock up the page. This is especially true on mobile devices. Consider uploading
@@ -104,11 +105,10 @@
             </p>
             <p class="lead" style="text-align:center;color:brown;"><strong>*** Disclaimer ***</strong></p>
             <p class="lead text-justify" style="color:brown;">
-                These are all very young technologies. Many of the potential benefits offered by this design pattern have not yet been realized.
-                A primary purpose of this site is to track these technologies as they develop. One of the biggest shortcomings
-                right now is an inability to compile this project to WebAssembly with release level optimizations. This is
-                the <a href="https://github.com/rust-lang/rust/issues/38558">issue</a>. This considerably
-                impacts runtime performance.
+                These are all relatively young technologies. Many of the benefits offered by this design pattern are not yet fully realized.
+                While this project presents performance information, the actual performance numbers may not live up to expectations.
+                They did not live up to mine. That being said, the primary purpose of this project is not to benchmark performance,
+                but is to provide a guide to using these technologies as they develop.
             </p>
         </div>
     </div>
@@ -197,26 +197,125 @@
     <a name="benchmarks"></a>
     <div class="content-section-a">
         <div class="container">
+            <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">Benchmarks</h2>
+            <p class="lead text-justify">
+                The benchmarks show the average step duration computed for ten steps with <i>k</i> values ranging from two
+                to sixty-four (smaller values are better).
+            </p>
             <div class="row">
-                <div class="col-md-5">
-                    <hr class="section-heading-spacer">
-                    <div class="clearfix"></div>
-                    <h2 class="section-heading">Benchmarks</h2>
-                    <p class="lead text-justify">
-                        These benchmarks show the average step duration of ten steps for <i>k</i> values ranging from two
-                        to sixty-four (smaller values are better). Clearly, there can be a significant performance benefit
-                        in using asm.js. For examle, using Firefox with a <i>k</i> value of sixty-four produces a 2.5 times
-                        speedup compared to the JavaScript version. The reason why the Chrome asm.js version is so slow is
-                        unclear. WebAssembly was not included because, as discuessed in the disclaimer, it is not currently
-                        possible to compile this project using release level optimizations. Because these technologies are
-                        so young, these benchmarks serve as a lower bound of what will be possible in the future.
-                    </p>
-                </div>
-                <div class="col-md-7 text-center">
+                <div class="col-md-6">
                     <img class="img-responsive" src="benchmarks.png" alt="">
                 </div>
+                <div class="col-md-6">
+                    <div class="table-container">
+                        <table class="table table-bordered table-striped table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><i>k</i>=2 (ms)</th>
+                                    <th><i>k</i>=4 (ms)</th>
+                                    <th><i>k</i>=8 (ms)</th>
+                                    <th><i>k</i>=16 (ms)</th>
+                                    <th><i>k</i>=32 (ms)</th>
+                                    <th><i>k</i>=64 (ms)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Firefox 54 Rust (wasm)</td>
+                                    <td>314</td>
+                                    <td>528</td>
+                                    <td>878</td>
+                                    <td>1653</td>
+                                    <td>3179</td>
+                                    <td>6180</td>
+                                </tr>
+                                <tr>
+                                    <td>Chromium 58 Rust (asmjs)</td>
+                                    <td>149</td>
+                                    <td>228</td>
+                                    <td>372</td>
+                                    <td>665</td>
+                                    <td>1257</td>
+                                    <td>2484</td>
+                                </tr>
+                                <tr>
+                                    <td>Chromium 58 Rust (wasm)</td>
+                                    <td>134</td>
+                                    <td>212</td>
+                                    <td>365</td>
+                                    <td>651</td>
+                                    <td>1219</td>
+                                    <td>2326</td>
+                                </tr>
+                                <tr>
+                                    <td>Chromium 58 JavaScript</td>
+                                    <td>195</td>
+                                    <td>220</td>
+                                    <td>299</td>
+                                    <td>474</td>
+                                    <td>895</td>
+                                    <td>1606</td>
+                                </tr>
+                                <tr>
+                                    <td>Firefox 54 JavaScript</td>
+                                    <td>101</td>
+                                    <td>140</td>
+                                    <td>229</td>
+                                    <td>384</td>
+                                    <td>679</td>
+                                    <td>1257</td>
+                                </tr>
+                                <tr>
+                                    <td>Firefox 54 Rust (asmjs)</td>
+                                    <td>86</td>
+                                    <td>103</td>
+                                    <td>127</td>
+                                    <td>179</td>
+                                    <td>292</td>
+                                    <td>502</td>
+                                </tr>
+                                <tr>
+                                    <td>Native Rust</td>
+                                    <td>22</td>
+                                    <td>28</td>
+                                    <td>38</td>
+                                    <td>61</td>
+                                    <td>99</td>
+                                    <td>177</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+            </br>
+            <p class="lead text-justify">
+                Overall, I would say the benchmarks are confussing and disappointing. While the asm.js version in Firefox is very promising,
+                it is overshadowed by the Firefox WebAssembly version performing considerably worse than all other benchmarks.
+                This is odd because the WebAssembly version beats the asm.js version in Chromium, but unfortunately both
+                lose out to the plain old JavaScript implementation. I tried to keep the implementations of the algorithms
+                as similar, yet idiomatic, as possible to present a fair comparison.
+            </p>
+            <p class="lead text-justify">
+                I can think of a few explanations for the odd results. First, there is only one hot section in the code: calculating the
+                distance between two RGB colors using euclidean distance. Modern JavaScript engines are probably pretty good
+                at optimizing for this simple computation. In fact, I rewrote this function to use an imperitive instead
+                of functional style and saw a drastic speedup in the JavaScript version. Secondly, the asm.js code produced
+                by the Rust compiler uses the "almost asm" directive opposed to the "use asm" directive in the resulting
+                JavaScript. I believe this may have an impact on how much browsers optimize for asm.js. Finally, WebAssembly
+                just reached its minimal viable product release making it a fair bet that browsers are far from having optimal
+                implementations.
+            </p>
+            <p class="lead text-justify">
+                Despite the results, I think the big take away is that modern JavaScript is fast, but there is still a definate gap between
+                it and native speeds. We have technology that is proof that this gap can be closed (the asm.js version in
+                Firefox). Only the future and hard work can tell us how much more this gap can be closed.
+            </p>
         </div>
+    </div>
 </body>
 
 </html>
