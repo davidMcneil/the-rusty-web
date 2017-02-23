@@ -79,8 +79,8 @@
                 This project demonstrates a complete, albeit simple, example of integrating
                 <a href="https://www.rust-lang.org">Rust</a> code into a web application. This is accomplished by compiling
                 Rust to <a href="http://asmjs.org/">asm.js</a> or <a href="http://webassembly.org/">WebAssembly</a>. The
-                basic design pattern this site explores uses Rust to implement CPU bound portions of an app while using existing
-                web technologies to handle user facing, I/O bound pieces. The
+                basic design pattern this project explores uses Rust to implement CPU bound portions of an app while using
+                existing web technologies to handle user facing, I/O bound pieces. The
                 <a href="https://davidmcneil.gitbooks.io/the-rusty-web/content/">guide</a> explores this design pattern in
                 detail.
             </p>
@@ -201,8 +201,10 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">Benchmarks</h2>
             <p class="lead text-justify">
-                The benchmarks show the average step duration computed for ten steps with <i>k</i> values ranging from two
-                to sixty-four (smaller values are better).
+                The benchmarks show the average step duration computed for ten <i>steps</i> with <i>k</i> values ranging
+                from two to sixty-four (smaller values are better). I tried to keep the implementations of the algorithm
+                as similar, yet idiomatic, as possible to present a fair comparison, and attempted to compile with as many
+                optimizations as possible.
             </p>
             <div class="row">
                 <div class="col-md-6">
@@ -293,26 +295,29 @@
             </div>
             </br>
             <p class="lead text-justify">
-                Overall, I would say the benchmarks are confussing and disappointing. While the asm.js version in Firefox is very promising,
-                it is overshadowed by the Firefox WebAssembly version performing considerably worse than all other benchmarks.
-                This is odd because the WebAssembly version beats the asm.js version in Chromium, but unfortunately both
-                lose out to the plain old JavaScript implementation. I tried to keep the implementations of the algorithms
-                as similar, yet idiomatic, as possible to present a fair comparison.
+                Overall, the benchmarks are confussing and disappointing. While the asm.js version in Firefox is very promising, it is overshadowed
+                by the Firefox WebAssembly version performing considerably worse than all other benchmarks. This is odd because
+                the WebAssembly version beats the asm.js version in Chromium, but unfortunately both lose out to the plain
+                old JavaScript implementation.
             </p>
             <p class="lead text-justify">
                 I can think of a few explanations for the odd results. First, there is only one hot section in the code: calculating the
                 distance between two RGB colors using euclidean distance. Modern JavaScript engines are probably pretty good
-                at optimizing for this simple computation. In fact, I rewrote this function to use an imperitive instead
-                of functional style and saw a drastic speedup in the JavaScript version. Secondly, the asm.js code produced
-                by the Rust compiler uses the "almost asm" directive opposed to the "use asm" directive in the resulting
-                JavaScript. I believe this may have an impact on how much browsers optimize for asm.js. Finally, WebAssembly
-                just reached its minimal viable product release making it a fair bet that browsers are far from having optimal
-                implementations.
+                at optimizing this simple computation. In fact, I rewrote this function using an imperative opposed to a
+                functional style and saw a drastic speedup in the JavaScript version. Secondly, the asm.js code produced
+                by the Rust compiler uses the "almost asm" directive opposed to the "use asm" directive. I believe this may
+                have an impact on how much browsers optimize for asm.js. Finally, WebAssembly just reached its minimal viable
+                product release making it a fair bet that browsers are far from having optimal implementations. That being
+                said, it is troubling to see worse performance from a design pattern that focuses on CPU bound tasks. Ultimately,
+                this is only one very small benchmark and I do not believe much can be said about the overall performance
+                capabilities of any technology. However, if you have any insight into the poor performance, issues and pull
+                requests are always welecome!
             </p>
             <p class="lead text-justify">
                 Despite the results, I think the big take away is that modern JavaScript is fast, but there is still a definate gap between
-                it and native speeds. We have technology that is proof that this gap can be closed (the asm.js version in
-                Firefox). Only the future and hard work can tell us how much more this gap can be closed.
+                it and native speeds. Even for this simple example, we have technology demonstrating this gap can be closed
+                (the asm.js version in Firefox). Therefore, I do believe this design pattern holds merit and it will only
+                be the future and hard work that will determine how much.
             </p>
         </div>
     </div>
