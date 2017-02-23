@@ -47,12 +47,6 @@
     }
 }
 
-@media (min-width: 992px) {
-    img {
-        margin-top: 60px;
-    }
-}
-
 /* Classes for tables. */
 .table-container {
     display: block;
@@ -63,6 +57,10 @@
 .table-container td {
     font-weight: normal;
     text-align: right;
+}
+
+td:first-child {  
+    text-align: left;
 }
 
 .text-justify {

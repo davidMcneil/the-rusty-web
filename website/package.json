@@ -4,8 +4,9 @@
     "description": "Targeting the web with Rust.",
     "main": "webpack.config.js",
     "scripts": {
-        "rust-libs": "mkdir -p dist/rust_libs && cp ../target/asmjs-unknown-emscripten/release/the_rusty_web.js dist/rust_libs/the_rusty_web_asmjs.js && cp ../target/wasm32-unknown-emscripten/debug/the_rusty_web.js dist/rust_libs/the_rusty_web_wasm.js && cp ../target/wasm32-unknown-emscripten/debug/deps/the_rusty_web-*.wasm dist/rust_libs/the_rusty_web_wasm.wasm",
+        "rust-libs": "mkdir -p dist/rust_libs && cp ../target/asmjs-unknown-emscripten/release/the_rusty_web.js dist/rust_libs/the_rusty_web_asmjs.js && cp ../target/wasm32-unknown-emscripten/release/the_rusty_web.js dist/rust_libs/the_rusty_web_wasm.js && cp ../target/wasm32-unknown-emscripten/release/deps/the_rusty_web-*.wasm dist/rust_libs/the_rusty_web_wasm.wasm",
         "build": "npm run rust-libs && webpack",
+        "rust-libs-debug": "mkdir -p dist/rust_libs && cp ../target/asmjs-unknown-emscripten/debug/the_rusty_web.js dist/rust_libs/the_rusty_web_asmjs.js && cp ../target/wasm32-unknown-emscripten/debug/the_rusty_web.js dist/rust_libs/the_rusty_web_wasm.js && cp ../target/wasm32-unknown-emscripten/debug/deps/the_rusty_web-*.wasm dist/rust_libs/the_rusty_web_wasm.wasm",
         "build-release": "npm run rust-libs && NODE_ENV=production webpack -p",
         "start": "npm run rust-libs && webpack-dev-server --hot",
         "loc": "sloc src/",
