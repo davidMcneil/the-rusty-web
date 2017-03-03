@@ -17,10 +17,10 @@ The project compares implementations of the
 CPU bound task) applied to an image. The algorithm gives the resulting image a softened, painted look.
 
 ## Setup
-This will only hit the highlights see the [guide](https://davidmcneil.gitbooks.io/the-rusty-web/content/) 
-for a detailed description of how to setup the project.
 
 ### Dependencies
+See the [guide](https://davidmcneil.gitbooks.io/the-rusty-web/content/setup-and-hello-world.html) 
+for steps on installing the dependencies.
 * [Rust](https://www.rust-lang.org)
 * [Node](https://nodejs.org)
 * [Emscripten](http://emscripten.org)
