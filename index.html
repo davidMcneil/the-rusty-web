@@ -306,7 +306,7 @@
                 at optimizing this simple computation. In fact, I rewrote this function using an imperative opposed to a
                 functional style and saw a drastic speedup in the JavaScript version. Secondly, the asm.js code produced
                 by the Rust compiler uses the "almost asm" directive opposed to the "use asm" directive. I believe this may
-                have an impact on how much browsers optimize for asm.js. Finally, WebAssembly just reached its minimal viable
+                have an impact on how much browsers optimize for asm.js. Finally, WebAssembly recently reached its minimal viable
                 product release making it a fair bet that browsers are far from having optimal implementations. That being
                 said, it is troubling to see worse performance from a design pattern that focuses on CPU bound tasks. Ultimately,
                 this is only one very small benchmark and I do not believe much can be said about the overall performance
@@ -314,7 +314,7 @@
                 requests are always welecome!
             </p>
             <p class="lead text-justify">
-                Despite the results, I think the big take away is that modern JavaScript is fast, but there is still a definate gap between
+                Despite the results, I think the big take away is that modern JavaScript is fast, but there is still a definite gap between
                 it and native speeds. Even for this simple example, we have technology demonstrating this gap can be closed
                 (the asm.js version in Firefox). Therefore, I do believe this design pattern holds merit and it will only
                 be the future and hard work that will determine how much.

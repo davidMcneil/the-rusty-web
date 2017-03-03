@@ -1893,7 +1893,7 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = 1024;
 
-STATICTOP = STATIC_BASE + 15440;
+STATICTOP = STATIC_BASE + 17056;
   /* global initializers */  __ATINIT__.push();
   
 
@@ -1902,7 +1902,7 @@ memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasm
 
 
 
-var STATIC_BUMP = 15440;
+var STATIC_BUMP = 17056;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -5582,7 +5582,7 @@ staticSealed = true; // seal the static portion of memory
 
 
 
-Module['wasmTableSize'] = 190;
+Module['wasmTableSize'] = 194;
 
 function invoke_iiii(index,a1,a2,a3) {
   try {
