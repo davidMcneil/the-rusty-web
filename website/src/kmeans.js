@@ -1,7 +1,8 @@
 const distance = (observation_1, observation_2) => {
     let sum_sqrs = 0;
     for (let i = 0; i < observation_1.length; i++) {
-        sum_sqrs += Math.pow(observation_1[i] - observation_2[i], 2);
+        let diff = observation_1[i] - observation_2[i];
+        sum_sqrs += diff * diff;
     }
     return Math.sqrt(sum_sqrs);
 };

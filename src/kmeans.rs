@@ -7,7 +7,8 @@ pub type Feature = f64;
 fn distance(observation_1: &[Feature], observation_2: &[Feature]) -> f64 {
     let mut sum_sqrs = 0.0;
     for i in 0..observation_1.len() {
-        sum_sqrs += (observation_1[i] - observation_2[i]).powi(2);
+        let diff = observation_1[i] - observation_2[i];
+        sum_sqrs += diff * diff;
     }
     sum_sqrs.sqrt()
 }
