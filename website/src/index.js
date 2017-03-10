@@ -211,6 +211,6 @@ $(document).ready(() => {
             wasm_button.click(() => paint(WasmKmeansPainter));
         });
         /* Trigger a change to load the default image. */
-        file_upload.change();
+        setTimeout(() => file_upload.change(), 100);
     });
 });
