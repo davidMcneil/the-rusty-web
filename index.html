@@ -103,13 +103,6 @@
                 would either need to be broken into smaller pieces or run in a background thread using
                 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Workers</a>.
             </p>
-            <p class="lead" style="text-align:center;color:brown;"><strong>*** Disclaimer ***</strong></p>
-            <p class="lead text-justify" style="color:brown;">
-                These are all relatively young technologies. Many of the benefits offered by this design pattern are not yet fully realized.
-                While this project presents performance information, the actual performance numbers may not live up to expectations.
-                They did not live up to mine. That being said, the primary purpose of this project is not to benchmark performance,
-                but is to provide a guide to using these technologies as they develop.
-            </p>
         </div>
     </div>
 
@@ -204,7 +197,9 @@
                 The benchmarks show the average step duration computed for ten <i>steps</i> with <i>k</i> values ranging
                 from two to sixty-four (smaller values are better). I tried to keep the implementations of the algorithm
                 as similar, yet idiomatic, as possible to present a fair comparison, and attempted to compile with as many
-                optimizations as possible.
+                optimizations as possible. All targets were compiled using the
+                <i>rustc 1.17.0-nightly (b1e31766d 2017-03-03)</i> version of the Rust compiler and the Emscripten toolchain
+                version <i>1.37.3</i>.
             </p>
             <div class="row">
                 <div class="col-md-6">
@@ -226,67 +221,67 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Firefox 54 Rust (wasm)</td>
-                                    <td>314</td>
-                                    <td>528</td>
-                                    <td>878</td>
-                                    <td>1653</td>
-                                    <td>3179</td>
-                                    <td>6180</td>
+                                    <td>Chromium 59 JavaScript</td>
+                                    <td>190</td>
+                                    <td>224</td>
+                                    <td>369</td>
+                                    <td>915</td>
+                                    <td>1935</td>
+                                    <td>3653</td>
                                 </tr>
                                 <tr>
-                                    <td>Chromium 58 Rust (asmjs)</td>
-                                    <td>149</td>
-                                    <td>228</td>
-                                    <td>372</td>
-                                    <td>665</td>
-                                    <td>1257</td>
-                                    <td>2484</td>
+                                    <td>Firefox 55 JavaScript</td>
+                                    <td>99</td>
+                                    <td>136</td>
+                                    <td>217</td>
+                                    <td>382</td>
+                                    <td>683</td>
+                                    <td>1282</td>
                                 </tr>
                                 <tr>
-                                    <td>Chromium 58 Rust (wasm)</td>
-                                    <td>134</td>
-                                    <td>212</td>
-                                    <td>365</td>
-                                    <td>651</td>
-                                    <td>1219</td>
-                                    <td>2326</td>
+                                    <td>Chromium 59 Rust (asmjs)</td>
+                                    <td>125</td>
+                                    <td>126</td>
+                                    <td>154</td>
+                                    <td>181</td>
+                                    <td>293</td>
+                                    <td>511</td>
                                 </tr>
                                 <tr>
-                                    <td>Chromium 58 JavaScript</td>
-                                    <td>195</td>
-                                    <td>220</td>
-                                    <td>299</td>
-                                    <td>474</td>
-                                    <td>895</td>
-                                    <td>1606</td>
-                                </tr>
-                                <tr>
-                                    <td>Firefox 54 JavaScript</td>
-                                    <td>101</td>
+                                    <td>Firefox 55 Rust (asmjs)</td>
+                                    <td>126</td>
+                                    <td>128</td>
                                     <td>140</td>
-                                    <td>229</td>
-                                    <td>384</td>
-                                    <td>679</td>
-                                    <td>1257</td>
+                                    <td>189</td>
+                                    <td>291</td>
+                                    <td>488</td>
                                 </tr>
                                 <tr>
-                                    <td>Firefox 54 Rust (asmjs)</td>
-                                    <td>86</td>
-                                    <td>103</td>
-                                    <td>127</td>
+                                    <td>Firefox 55 Rust (wasm)</td>
+                                    <td>122</td>
+                                    <td>131</td>
+                                    <td>148</td>
                                     <td>179</td>
-                                    <td>292</td>
-                                    <td>502</td>
+                                    <td>233</td>
+                                    <td>329</td>
+                                </tr>
+                                <tr>
+                                    <td>Chromium 59 Rust (asmjs)</td>
+                                    <td>61</td>
+                                    <td>76</td>
+                                    <td>95</td>
+                                    <td>121</td>
+                                    <td>182</td>
+                                    <td>320</td>
                                 </tr>
                                 <tr>
                                     <td>Native Rust</td>
-                                    <td>22</td>
-                                    <td>28</td>
-                                    <td>38</td>
-                                    <td>61</td>
-                                    <td>99</td>
-                                    <td>177</td>
+                                    <td>19</td>
+                                    <td>25</td>
+                                    <td>35</td>
+                                    <td>54</td>
+                                    <td>90</td>
+                                    <td>155</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -295,29 +290,18 @@
             </div>
             </br>
             <p class="lead text-justify">
-                Overall, the benchmarks are confusing and disappointing. While the asm.js version in Firefox is very promising, it is overshadowed
-                by the Firefox WebAssembly version performing considerably worse than all other benchmarks. This is odd because
-                the WebAssembly version beats the asm.js version in Chromium, but unfortunately both lose out to the plain
-                old JavaScript implementation.
+                Overall, I think the results are pretty promising. For the WebAssmebly version when <i>k</i> equals sixty-four,
+                we are looking at a 4.0x speedup compared to the fastest JavaScript version with only a 2.0x slow down compared
+                to native performance.
             </p>
             <p class="lead text-justify">
-                I can think of a few explanations for the odd results. First, there is only one hot section in the code: calculating the
-                distance between two RGB colors using euclidean distance. Modern JavaScript engines are probably pretty good
-                at optimizing this simple computation. In fact, I rewrote this function using an imperative opposed to a
-                functional style and saw a drastic speedup in the JavaScript version. Secondly, the asm.js code produced
-                by the Rust compiler uses the "almost asm" directive opposed to the "use asm" directive. I believe this may
-                have an impact on how much browsers optimize for asm.js. Finally, WebAssembly recently reached its minimal viable
-                product release making it a fair bet that browsers are far from having optimal implementations. That being
-                said, it is troubling to see worse performance from a design pattern that focuses on CPU bound tasks. Ultimately,
-                this is only one very small benchmark and I do not believe much can be said about the overall performance
-                capabilities of any technology. However, if you have any insight into the poor performance, issues and pull
-                requests are always welcome!
-            </p>
-            <p class="lead text-justify">
-                Despite the results, I think the big take away is that modern JavaScript is fast, but there is still a definite gap between
-                it and native speeds. Even for this simple example, we have technology demonstrating this gap can be closed
-                (the asm.js version in Firefox). Therefore, I do believe this design pattern holds merit and it will only
-                be the future and hard work that will determine how much.
+                <b>Note:</b> These results are drastically different than my
+                <a href="https://github.com/davidMcneil/the-rusty-web/blob/master/img/original_benchmarks.png">
+                original findings
+                </a> which painted a pretty bleak picture for performance. Thanks to
+                <a href="https://github.com/shurcooL">shurcooL</a> for suggesting the <a href="https://github.com/davidMcneil/the-rusty-web/issues/3">fix</a>.
+                The fix was as simple as using multiplication to square a number instead of using <i>powi</i>. Just goes
+                to show how deceiving benchmarks can be!
             </p>
         </div>
     </div>
