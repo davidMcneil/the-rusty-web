@@ -6,7 +6,6 @@ mod kmeans;
 mod kmeans_painter;
 
 use kmeans_painter::KmeansPainter;
-use std::mem;
 use std::slice;
 
 #[allow(no_mangle_generic_items)]
@@ -16,7 +15,7 @@ pub unsafe extern "C" fn kmeans_painter_create<'a>(k: u16,
                                                    size: usize)
                                                    -> *mut KmeansPainter<'a> {
     let image_data = slice::from_raw_parts_mut(image_data, size);
-    mem::transmute(Box::new(KmeansPainter::new(k, image_data)))
+    Box::into_raw(Box::new(KmeansPainter::new(k, image_data)))
 }
 
 #[no_mangle]
@@ -27,7 +26,7 @@ pub unsafe extern "C" fn kmeans_painter_step(kmeans_painter: *mut KmeansPainter,
 
 #[no_mangle]
 pub unsafe extern "C" fn kmeans_painter_destroy(kmeans_painter: *mut KmeansPainter) {
-    let _: Box<KmeansPainter> = mem::transmute(kmeans_painter);
+    Box::from_raw(kmeans_painter);
 }
 
 // Paint image natively.
