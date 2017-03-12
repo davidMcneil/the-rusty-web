@@ -211,6 +211,10 @@ $(document).ready(() => {
             wasm_button.click(() => paint(WasmKmeansPainter));
         });
         /* Trigger a change to load the default image. */
-        setTimeout(() => file_upload.change(), 100);
+        /* TODO: For some reason there is a bug where the WebAssembly module _malloc call hangs
+           if we do not wait a little bit. I assume this is because the module is somehow not fully
+           initialized put a delay here to try and avoid that. I have only noticed this problem in
+           Firefox. */
+        setTimeout(() => file_upload.change(), 500);
     });
 });

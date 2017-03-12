@@ -30,6 +30,4 @@ export const load_wasm_module = () => (
     })
 );
 
-export const native_support = () => {
-    return "WebAssembly" in window;
-};
+export const native_support = () => ("WebAssembly" in window);
